@@ -1,7 +1,7 @@
 Citing Bot
 ======
 
-Citing Bot – это инструмент, который создает библиографические ссылки в статьях русскоязычной Википедии. Посмотреть на него в действии можно на [xtools.wmflabs.org](https://xtools.wmflabs.org/).
+Citing Bot – это инструмент, который создает библиографические ссылки в статьях русскоязычной Википедии. Посмотреть на него в действии можно на [xtools.wmflabs.org](https://tools.wmflabs.org/citing-bot).
 
 Подробнее можно узнать на [персональной странице](https://ru.wikipedia.org/wiki/User:Citing_Bot).
 
