@@ -5,7 +5,7 @@ Citing Bot – это инструмент, который создает биб
 
 Подробнее можно узнать на [персональной странице](https://ru.wikipedia.org/wiki/User:Citing_Bot).
 
-[![release](https://img.shields.io/github/release/x-tools/xtools.svg)](https://github.com/serpent-vlad/Citing-Bot/releases/latest)
+[![release](https://img.shields.io/github/release/serpent-vlad/Citing-Bot.svg)](https://github.com/serpent-vlad/Citing-Bot/releases/latest)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ## Licence (GPL-3.0+)
