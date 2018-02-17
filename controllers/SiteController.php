@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-use app\models\components\Tools;
+use models\components\Tools;
 use models\components\wiki\wikiTools;
 use Yii;
 use yii\filters\AccessControl;

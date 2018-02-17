@@ -2,42 +2,14 @@
 
 namespace app\controllers;
 
-use app\models\components\Tools;
-use models\components\wiki\wikiTools;
 use Yii;
-use yii\filters\AccessControl;
 use yii\helpers\Url;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
+use models\components\Tools;
+use models\components\wiki\wikiTools;
 
 class ApiController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only'  => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow'   => true,
-                        'roles'   => ['@'],
-                    ],
-                ],
-            ],
-            'verbs'  => [
-                'class'   => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
-    }
-
     /**
      * @param bool $pmid
      * @param bool $doi
@@ -133,30 +105,5 @@ class ApiController extends Controller
         return $this->render('doi', [
             'output' => $output,
         ]);
-    }
-
-    public function actionTest()
-    {
-        $wiki = new wikiTools();
-
-        $w = $wiki->fetch([
-            'action'   => 'query',
-            'list'     => 'categorymembers',
-            'format'   => 'json',
-            'cmpageid' => 4975457,
-            'cmlimit'  => 50,
-        ]);
-
-        $tw = $wiki->fetch([
-            'action'  => 'query',
-            'prop'    => 'revisions',
-            'rvprop'  => 'content',
-            'rvlimit' => 1,
-            'pageids' => 4975457,
-        ]);
-
-        echo "<pre>";
-        print_r($w);
-        print_r($tw);
     }
 }

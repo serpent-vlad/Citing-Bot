@@ -1,10 +1,9 @@
 <?php
 
-namespace app\models\components;
+namespace models\components;
 
 use models\components\externalDb\Doi;
 use models\components\externalDb\Pubmed;
-use models\components\Template;
 use yii\base\Exception;
 
 class Tools
