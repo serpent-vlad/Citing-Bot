@@ -1,53 +1,59 @@
 <?php
 
-$params = require __DIR__ . '/params.php';
+$params = array_merge(
+    require(__DIR__ . '/params.php'),
+    require(__DIR__ . '/params-local.php')
+);
 $db = require __DIR__ . '/db.php';
 
 $config = [
-    'id' => 'basic',
-    'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
-    'aliases' => [
-        '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+    'id'         => 'basic',
+    'basePath'   => dirname(__DIR__),
+    'bootstrap'  => ['log'],
+    'version'    => '2.0',
+    'aliases'    => [
+        '@bower'  => '@vendor/bower-asset',
+        '@npm'    => '@vendor/npm-asset',
+        '@models' => '@app/models',
     ],
     'components' => [
-        'request' => [
-            'baseUrl' => '',
+        'request'      => [
+            'baseUrl'             => '',
             'cookieValidationKey' => 'ugIMIWZ-4xkQMbxRlVNX68NjBjF_-sbe',
         ],
-        'cache' => [
+        'cache'        => [
             'class' => 'yii\caching\FileCache',
         ],
-        'user' => [
-            'identityClass' => 'app\models\User',
+        'user'         => [
+            'identityClass'   => 'app\models\User',
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
+        'mailer'       => [
+            'class'            => 'yii\swiftmailer\Mailer',
             'useFileTransport' => true,
         ],
-        'log' => [
+        'log'          => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
-            'targets' => [
+            'targets'    => [
                 [
-                    'class' => 'yii\log\FileTarget',
+                    'class'  => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
             ],
         ],
-        'db' => $db,
-        'urlManager' => [
+        'db'           => $db,
+        'urlManager'   => [
             'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
+            'showScriptName'  => false,
+            'rules'           => [
+                'api/pmid/<pmid:\d+>' => 'api/pmid',
             ],
         ],
     ],
-    'params' => $params,
+    'params'     => $params,
 ];
 
 if (YII_ENV_DEV) {

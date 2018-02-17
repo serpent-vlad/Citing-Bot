@@ -2,9 +2,9 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+$this->title = 'PMID parser';
 ?>
-<div class="site-index">
+<div class="api-pmid">
 
     <?php if ($output): ?>
         <div class="form-group">
@@ -23,11 +23,6 @@ $this->title = 'My Yii Application';
         <div class="form-group">
             <label for="input-pmid">Pmid</label>
             <input class="form-control" name="pmid" id="input-pmid" placeholder="PMID">
-        </div>
-
-        <div class="form-group">
-            <label for="input-doi">DOI</label>
-            <input class="form-control" name="doi" id="input-doi" placeholder="DOI">
         </div>
 
         <button type="submit" class="btn">Отправить</button>

@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\components\Tools;
+use models\components\wiki\wikiTools;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -20,17 +22,17 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'only'  => ['logout'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
+                        'allow'   => true,
+                        'roles'   => ['@'],
                     ],
                 ],
             ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
+            'verbs'  => [
+                'class'   => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post'],
                 ],
@@ -47,10 +49,6 @@ class SiteController extends Controller
             'error' => [
                 'class' => 'yii\web\ErrorAction',
             ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
         ];
     }
 
@@ -61,7 +59,72 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        return $this->render('index', [
+            'scenario' => '',
+            'doi'      => 2
+        ]);
+    }
+
+    /**
+     * Displays Bot page.
+     *
+     * @param null|string|int $pmid
+     * @param null|string     $doi
+     * @return string
+     */
+    public function actionApi($pmid = 1542678, $doi = null)
+    {
+        $tools = new Tools('api');
+
+        /* is PMID */
+        if ($pmid != null && (int)$pmid > 0) {
+            $tools->scenario = Tools::SCENARIO_PMID;
+            $tools->input = $pmid;
+            $doi = null;
+        }
+
+        /* is DOI */
+        if ($doi != null && preg_match('~(10\.\d{3,4}(?:(\.\d+)+|)(/|%2[fF])..+)~', $doi)) {
+            $tools->scenario = Tools::SCENARIO_DOI;
+            $tools->input = $doi;
+            $pmid = null;
+        }
+
+        /* is true input */
+        if ($pmid != null || $doi != null) {
+            $tools->read();
+        }
+
+        $output = $tools->getOutputTemplate();
+
+        return $this->render('index', [
+            'output' => $output,
+        ]);
+    }
+
+    public function actionTest()
+    {
+        $wiki = new wikiTools();
+
+        $w = $wiki->fetch([
+            'action'   => 'query',
+            'list'     => 'categorymembers',
+            'format'   => 'json',
+            'cmpageid' => 4975457,
+            'cmlimit'  => 50,
+        ]);
+
+        $tw = $wiki->fetch([
+            'action'  => 'query',
+            'prop'    => 'revisions',
+            'rvprop'  => 'content',
+            'rvlimit' => 1,
+            'pageids' => 4975457,
+        ]);
+
+        echo "<pre>";
+        print_r($w);
+        print_r($tw);
     }
 
     /**

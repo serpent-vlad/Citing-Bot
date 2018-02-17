@@ -2,9 +2,9 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+$this->title = 'DOI parser';
 ?>
-<div class="site-index">
+<div class="api-doi">
 
     <?php if ($output): ?>
         <div class="form-group">
@@ -19,11 +19,6 @@ $this->title = 'My Yii Application';
     <?php endif; ?>
 
     <form action="<?= \yii\helpers\Url::to(['api/index']) ?>">
-
-        <div class="form-group">
-            <label for="input-pmid">Pmid</label>
-            <input class="form-control" name="pmid" id="input-pmid" placeholder="PMID">
-        </div>
 
         <div class="form-group">
             <label for="input-doi">DOI</label>
