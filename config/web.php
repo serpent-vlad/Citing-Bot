@@ -7,7 +7,7 @@ $params = array_merge(
 $db = require __DIR__ . '/db.php';
 
 $config = [
-    'id'         => 'basic',
+    'id'         => 'citing-bot',
     'basePath'   => dirname(__DIR__),
     'bootstrap'  => ['log'],
     'version'    => '2.0',
