@@ -64,6 +64,7 @@ class SiteController extends Controller
         ]);
     }
 
+    /*
     public function actionTest()
     {
         $wiki = new wikiTools();
@@ -88,6 +89,7 @@ class SiteController extends Controller
         print_r($w);
         print_r($tw);
     }
+    */
 
     /**
      * Login action.
