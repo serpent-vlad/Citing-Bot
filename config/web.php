@@ -19,7 +19,7 @@ $config = [
     ],
     'components' => [
         'request'      => [
-            'baseUrl'             => '',
+            'baseUrl'             => 'citing-bot/',
             'cookieValidationKey' => 'ugIMIWZ-4xkQMbxRlVNX68NjBjF_-sbe',
         ],
         'cache'        => [
