@@ -73,6 +73,13 @@ class ApiController extends Controller
         ]);
     }
 
+    /**
+     * @param int  $doi
+     * @param bool $pageOut
+     * @return string
+     * @throws \OAuthException
+     * @throws \yii\base\Exception
+     */
     public function actionDoi($doi = 0, $pageOut = false)
     {
 
