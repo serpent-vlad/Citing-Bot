@@ -2,7 +2,7 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+$this->title = 'Citing Bot | Главная страница';
 ?>
 <div class="site-index">
 
