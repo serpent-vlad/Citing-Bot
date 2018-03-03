@@ -5,8 +5,7 @@ if ! [[ $response =~ ^([nN][oO]|[nN])$ ]]
 then
 	webservice stop
 	echo -e "\nUpdating the code..."
-	git reset --hard origin/master
-    git pull
+    git pull origin master
     composer update
     php yii cache/flush-all
 	echo
