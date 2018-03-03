@@ -2,9 +2,10 @@
 
 namespace models\components;
 
+use Yii;
+use yii\base\Exception;
 use models\components\externalDb\Doi;
 use models\components\externalDb\Pubmed;
-use yii\base\Exception;
 
 class Tools
 {
@@ -24,6 +25,50 @@ class Tools
         if (!$type) {
             throw new Exception('Fatal error in function <Tools/construct>: not found $type');
         }
+    }
+
+    /**
+     * Get the short hash of the currently checked-out Git commit.
+     * @return string
+     */
+    public static function gitShortHash()
+    {
+        return Yii::$app->cache->getOrSet('shortHashGit', function () {
+            return exec("git rev-parse --short HEAD");
+        }, 0);
+    }
+
+    /**
+     * Get the full hash of the currently checkout-out Git commit.
+     * @return string
+     */
+    public static function gitHash()
+    {
+        return Yii::$app->cache->getOrSet('hashGit', function () {
+            return exec("git rev-parse HEAD");
+        }, 0);
+    }
+
+    /**
+     * Get the formatted real memory usage.
+     * @return float
+     */
+    public static function requestMemory()
+    {
+        $mem = memory_get_usage(false);
+        $div = pow(1024, 2);
+        return number_format($mem / $div, 2);
+    }
+
+    /**
+     * Get the duration of the current HTTP request in seconds.
+     * @return double
+     * Untestable since there is no request stack in the tests.
+     * @codeCoverageIgnore
+     */
+    public static function requestTime()
+    {
+        return number_format(Yii::getLogger()->getElapsedTime(), 3);
     }
 
     /**

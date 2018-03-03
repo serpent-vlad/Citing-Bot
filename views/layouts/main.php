@@ -5,6 +5,7 @@
 /* @var $content string */
 
 use app\widgets\Alert;
+use models\components\Tools;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
@@ -36,12 +37,12 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
-    echo Nav::widget([
+    /*echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items'   => [
-            // ['label' => 'About', 'url' => ['/site/about']],
-            // ['label' => 'Contact', 'url' => ['/site/contact']],
-            /*Yii::$app->user->isGuest ? (
+            ['label' => 'About', 'url' => ['/site/about']],
+            ['label' => 'Contact', 'url' => ['/site/contact']],
+            Yii::$app->user->isGuest ? (
             ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
                 '<li>'
@@ -52,9 +53,9 @@ AppAsset::register($this);
                 )
                 . Html::endForm()
                 . '</li>'
-            )*/
+            )
         ],
-    ]);
+    ]);*/
     NavBar::end();
     ?>
 
@@ -74,7 +75,16 @@ AppAsset::register($this);
                 <p>&copy; 2014 – 2018 &middot; <a href="//ru.wikipedia.org/wiki/U:Citing_Bot"
                                                   title="Страница бота" target="_blank">Citing Bot</a> &middot; <a
                             href="//github.com/serpent-vlad/Citing-Bot/releases/tag/<?= Yii::$app->version ?>"
-                            target="_blank" title="Текущая версия Citing-Bot">v.<?= Yii::$app->version ?></a></p>
+                            target="_blank" title="Текущий релиз Citing-Bot">v.<?= Yii::$app->version ?></a> (<a
+                            href="//github.com/serpent-vlad/Citing-Bot/tree/<?= Tools::gitHash() ?>"
+                            title="Текущая версия Citing-Bot"
+                            target="_blank"><?= Tools::gitShortHash() ?></a>)</p>
+                <span>
+                    <small>
+                        <span>выполнено за <?= Tools::requestTime() ?> сек</span> &middot;
+                        <span>использовано <?= Tools::requestMemory() ?> MB памяти</span>
+                    </small>
+                </span>
             </div>
             <div class="col-xs-5 col-md-3">
                 <div class="text-right">
