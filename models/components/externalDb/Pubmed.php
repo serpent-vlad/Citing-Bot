@@ -62,8 +62,8 @@ class Pubmed extends Cite
                 case "PubDate":
                     preg_match("~(\d+)\s*(\w*)(?:\s*(\d+))*~", (string)$item, $match);
                     $this->year = (int)$match[1];
-                    if ($match[2] !== null) $this->month = $this->monthFormat((string)$match[2]);
-                    if ($match[3] !== null) $this->day = (int)$match[3];
+                    if (isset($match[2]) && $match[2] !== null) $this->month = $this->monthFormat((string)$match[2]);
+                    if (isset($match[3]) && $match[3] !== null) $this->day = (int)$match[3];
                     break;
                 case "FullJournalName":
                     $this->edition = ucwords((string)$item);
