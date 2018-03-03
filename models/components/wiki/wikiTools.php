@@ -3,8 +3,8 @@
 namespace models\components\wiki;
 
 use Yii;
-use OAuth;
-use OAuthException;
+use \OAuth;
+use \OAuthException;
 
 class wikiTools
 {
