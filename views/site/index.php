@@ -21,7 +21,7 @@ $this->title = 'My Yii Application';
     <form action="<?= \yii\helpers\Url::to(['api/index']) ?>">
 
         <div class="form-group">
-            <label for="input-pmid">Pmid</label>
+            <label for="input-pmid">PMID</label>
             <input class="form-control" name="pmid" id="input-pmid" placeholder="PMID">
         </div>
 

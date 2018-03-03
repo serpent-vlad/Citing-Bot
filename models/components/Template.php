@@ -87,11 +87,11 @@ class Template extends BaseModel
         $categoryTemplate = '';
         switch ($type) {
             case Tools::SCENARIO_PMID:
-                $categoryTemplate = '<noinclude>{{doc|Шаблон:Cite_pmid/subpage}}</noinclude>';
+                $categoryTemplate = '<noinclude>{{doc|Шаблон:Cite pmid/subpage}}</noinclude>';
                 break;
 
             case Tools::SCENARIO_DOI:
-                $categoryTemplate = '<noinclude>{{doc|Шаблон:Cite_doi/subpage}}</noinclude>';
+                $categoryTemplate = '<noinclude>{{doc|Шаблон:Cite doi/subpage}}</noinclude>';
                 break;
         }
 

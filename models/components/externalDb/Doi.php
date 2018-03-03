@@ -155,8 +155,8 @@ class Doi extends Cite
             $message = $response->message;
 
             $this->title = strip_tags($message->title[0]);
-            $this->url = $message->url;
             $this->publisher = strip_tags($message->publisher);
+            $this->url = $message->url;
 
             $this->year = $message->issued->{'date-parts'}[0][0];
             if (isset($message->issued->{'date-parts'}[0][1])) $this->month = $message->issued->{'date-parts'}[0][1];

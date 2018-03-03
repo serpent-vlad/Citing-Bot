@@ -11,8 +11,8 @@ $this->title = 'DOI parser';
     <?php if ($isEditSuccess): ?>
         <div class="alert alert-success alert-dismissable">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <a href="https://ru.wikipedia.org/wiki/Шаблон:Cite_doi/<?= $doi ?>" target="_blank">Страница подшаблона</a>
-            успешно создана!
+            <strong><a href="https://ru.wikipedia.org/wiki/Шаблон:Cite_doi/<?= $doi ?>" target="_blank">Страница подшаблона</a>
+            успешно создана!</strong>
         </div>
     <?php endif; ?>
 

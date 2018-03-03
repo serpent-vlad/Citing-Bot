@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this \yii\web\View */
+
 /* @var $content string */
 
 use app\widgets\Alert;
@@ -30,19 +31,18 @@ AppAsset::register($this);
     <?php
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
+        'brandUrl'   => Yii::$app->homeUrl,
+        'options'    => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
+        'items'   => [
+            // ['label' => 'About', 'url' => ['/site/about']],
+            // ['label' => 'Contact', 'url' => ['/site/contact']],
+            /*Yii::$app->user->isGuest ? (
+            ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post')
@@ -52,7 +52,7 @@ AppAsset::register($this);
                 )
                 . Html::endForm()
                 . '</li>'
-            )
+            )*/
         ],
     ]);
     NavBar::end();
@@ -67,11 +67,23 @@ AppAsset::register($this);
     </div>
 </div>
 
-<footer class="footer">
+<footer class="footer navbar-fixed-bottom">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <div class="row">
+            <div class="col-xs-7 col-md-9">
+                <p>&copy; 2014 – 2018 &middot; <a href="//ru.wikipedia.org/wiki/U:Citing_Bot"
+                                                  title="Страница бота" target="_blank">Citing Bot</a> &middot; <a
+                            href="//github.com/serpent-vlad/Citing-Bot/releases/tag/<?= Yii::$app->version ?>"
+                            target="_blank" title="Текущая версия Citing-Bot">v.<?= Yii::$app->version ?></a></p>
+            </div>
+            <div class="col-xs-5 col-md-3">
+                <div class="text-right">
+                    <a href="https://wikitech.wikimedia.org/wiki/Portal:Cloud_VPS" target="_blank">
+                        <img height="40px" src="/img/VPS-badge.svg" alt="Powered by Wikimedia Cloud Services">
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </footer>
 
