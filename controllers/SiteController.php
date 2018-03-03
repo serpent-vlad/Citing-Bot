@@ -75,7 +75,7 @@ class SiteController extends Controller
             'cmlimit'  => 50,
         ]);
 
-        $tw = $wiki->fetch([
+        /*$tw = $wiki->fetch([
             'action'  => 'query',
             'prop'    => 'revisions',
             'rvprop'  => 'content',
@@ -85,7 +85,7 @@ class SiteController extends Controller
 
         echo "<pre>";
         print_r($w);
-        print_r($tw);
+        //print_r($tw);
     }
     */
 

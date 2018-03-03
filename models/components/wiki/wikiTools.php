@@ -3,20 +3,24 @@
 namespace models\components\wiki;
 
 use Yii;
-use \OAuth;
-use \OAuthException;
+use MediaWiki\OAuthClient\Consumer;
+use MediaWiki\OAuthClient\Request;
+use MediaWiki\OAuthClient\Token;
+use MediaWiki\OAuthClient\SignatureMethod\HmacSha1;
 
 class wikiTools
 {
     const API_ROOT = 'https://ru.wikipedia.org/w/api.php';
     const WIKI_ROOT = 'https://ru.wikipedia.org/wiki';
 
-    protected $oauth;
+    protected $consumer;
+    protected $accessToken;
+    protected $authorizationHeader;
+
     protected $ch;
 
     /**
      * wikiTools constructor.
-     * @throws \OAuthException
      */
     public function __construct()
     {
@@ -25,45 +29,24 @@ class wikiTools
         $oauth_access_token = Yii::$app->params['OAUTH_ACCESS_TOKEN'];
         $oauth_access_secret = Yii::$app->params['OAUTH_ACCESS_SECRET'];
 
+        $this->consumer = new Consumer($oauth_consumer_token, $oauth_consumer_secret);
+        $this->accessToken = new Token($oauth_access_token, $oauth_access_secret);
+
+        //$this->conf = new ClientConfig( $endpoint );
+
+        /*
+        $request = Request::fromConsumerAndToken( $this->consumer, $this->accessToken, 'GET', 'https://en.wikipedia.org/w/api.php', $apiParams );
+        $request->signRequest( new HmacSha1(), $consumer, $accessToken );
+        $authorizationHeader = $request->toHeader();
+
+        /*
         $this->oauth = new OAuth($oauth_consumer_token, $oauth_consumer_secret,
             OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_AUTHORIZATION);
         $this->oauth->setToken($oauth_access_token, $oauth_access_secret);
         $this->oauth->enableDebug();
         $this->oauth->setSSLChecks(0);
         $this->oauth->setRequestEngine(OAUTH_REQENGINE_CURL);
-    }
-
-    /**
-     * @return bool
-     */
-    public function login()
-    {
-        $wp_username = Yii::$app->params['WP_USERNAME'];
-        $wp_password = Yii::$app->params['WP_PASSWORD'];
-
-        $response = $this->fetch([
-            'action' => 'query',
-            'meta'   => 'tokens',
-            'type'   => 'login'
-        ]);
-
-        if (!isset($response->batchcomplete)) return false;
-        if (!isset($response->query->tokens->logintoken)) return false;
-
-        $loginVars = [
-            'action'     => 'login',
-            'lgname'     => $wp_username,
-            'lgpassword' => $wp_password,
-            'lgtoken'    => $response->query->tokens->logintoken,
-        ];
-
-        $response = $this->fetch($loginVars, 'POST');
-        if (!isset($response->login->result)) return false;
-        if ($response->login->result == 'Success') return true;
-
-        Yii::warning($response->login->reason);
-
-        return false;
+        */
     }
 
     /**
@@ -90,12 +73,15 @@ class wikiTools
 
                 case 'get':
                     $url = self::API_ROOT . '?' . http_build_query($params);
-                    $header = 'Authentication: ' .
-                        $this->oauth->getRequestHeader(OAUTH_HTTP_METHOD_POST, $url);
+                    /* $header = 'Authentication: ' . $this->oauth->getRequestHeader(OAUTH_HTTP_METHOD_POST, $url); */
+
+                    $request = Request::fromConsumerAndToken($this->consumer, $this->accessToken, 'GET', $url);
+                    $request->signRequest(new HmacSha1(), $this->consumer, $this->accessToken);
+                    $this->authorizationHeader = $request->toHeader();
 
                     curl_setopt_array($this->ch, [
                         CURLOPT_URL        => $url,
-                        CURLOPT_HTTPHEADER => [$header],
+                        CURLOPT_HTTPHEADER => [$this->authorizationHeader],
                     ]);
 
                     $response = @json_decode($data = curl_exec($this->ch));
@@ -104,21 +90,20 @@ class wikiTools
                         return false;
                     }
 
-                    if (isset($response->error->code) && $response->error->code == 'assertuserfailed') {
-                        $this->login();
-                        return $this->fetch($params, $method);
-                    }
-
                     return ($this->returnedIsOkay($response)) ? $response : false;
 
                 case 'post':
 
-                    $header = 'Authentication: ' . $this->oauth->getRequestHeader(
-                            OAUTH_HTTP_METHOD_POST, self::API_ROOT, http_build_query($params));
+                    /* $header = 'Authentication: ' . $this->oauth->getRequestHeader(OAUTH_HTTP_METHOD_POST, self::API_ROOT, http_build_query($params)); */
+
+                    $request = Request::fromConsumerAndToken($this->consumer, $this->accessToken, 'POST', self::API_ROOT, http_build_query($params));
+                    $request->signRequest(new HmacSha1(), $this->consumer, $this->accessToken);
+                    $this->authorizationHeader = $request->toHeader();
+
                     curl_setopt_array($this->ch, [
                         CURLOPT_POST       => true,
                         CURLOPT_POSTFIELDS => http_build_query($params),
-                        CURLOPT_HTTPHEADER => [$header],
+                        CURLOPT_HTTPHEADER => [$this->authorizationHeader],
                     ]);
 
                     $response = @json_decode($data = curl_exec($this->ch));
@@ -127,19 +112,13 @@ class wikiTools
                         Yii::$app->end(0);
                     }
 
-                    if (isset($response->error) && $response->error->code == 'assertuserfailed') {
-                        $this->login();
-                        return $this->fetch($params, $method);
-                    }
-
                     return ($this->returnedIsOkay($response)) ? $response : false;
 
                     echo ' ! Unrecognized method.'; // @codecov ignore - will only be hit if error in our code
                     return null;
             }
-        } catch (OAuthException $E) {
+        } catch (\Exception $E) {
             echo " ! Exception caught!\n";
-            echo '   Response: ' . $E->lastResponse . "\n";
         }
     }
 
@@ -150,10 +129,6 @@ class wikiTools
     {
         if (!$this->ch) {
             $this->ch = curl_init();
-            if (!$this->login()) {
-                curl_close($this->ch);
-                Yii::warning('Could not login to Wikipedia');
-            }
         }
 
         return curl_setopt_array($this->ch, [
