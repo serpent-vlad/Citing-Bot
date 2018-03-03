@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc88618415f21b8aaa8d2c6eed8b6396",
+    "content-hash": "7072a825ba297169c1561ddbfe38f7c3",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -169,16 +169,16 @@
         },
         {
             "name": "ezyang/htmlpurifier",
-            "version": "v4.9.3",
+            "version": "v4.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "95e1bae3182efc0f3422896a3236e991049dac69"
+                "reference": "d85d39da4576a6934b72480be6978fb10c860021"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/95e1bae3182efc0f3422896a3236e991049dac69",
-                "reference": "95e1bae3182efc0f3422896a3236e991049dac69",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/d85d39da4576a6934b72480be6978fb10c860021",
+                "reference": "d85d39da4576a6934b72480be6978fb10c860021",
                 "shasum": ""
             },
             "require": {
@@ -212,7 +212,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2017-06-03T02:28:16+00:00"
+            "time": "2018-02-23T01:58:20+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -270,16 +270,16 @@
         },
         {
             "name": "yiisoft/yii2",
-            "version": "2.0.13.1",
+            "version": "2.0.14.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "7af96d8da5ea3e9a5dd05d0e734b21c5726a6ddf"
+                "reference": "d99969394c66dc3606134af092b8ec561ea5d7c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/7af96d8da5ea3e9a5dd05d0e734b21c5726a6ddf",
-                "reference": "7af96d8da5ea3e9a5dd05d0e734b21c5726a6ddf",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/d99969394c66dc3606134af092b8ec561ea5d7c6",
+                "reference": "d99969394c66dc3606134af092b8ec561ea5d7c6",
                 "shasum": ""
             },
             "require": {
@@ -366,20 +366,20 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2017-11-14T11:08:21+00:00"
+            "time": "2018-02-24T20:23:06+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap",
-            "version": "2.0.7",
+            "version": "2.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-bootstrap.git",
-                "reference": "02a54d868343ed11d02f0f0f8cbbecb590e0cb3f"
+                "reference": "3f49c47924bb9fa5363c3fc7b073d954168cf438"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-bootstrap/zipball/02a54d868343ed11d02f0f0f8cbbecb590e0cb3f",
-                "reference": "02a54d868343ed11d02f0f0f8cbbecb590e0cb3f",
+                "url": "https://api.github.com/repos/yiisoft/yii2-bootstrap/zipball/3f49c47924bb9fa5363c3fc7b073d954168cf438",
+                "reference": "3f49c47924bb9fa5363c3fc7b073d954168cf438",
                 "shasum": ""
             },
             "require": {
@@ -394,7 +394,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "yii\\bootstrap\\": ""
+                    "yii\\bootstrap\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -403,8 +403,22 @@
             ],
             "authors": [
                 {
+                    "name": "Paul Klimov",
+                    "email": "klimov.paul@gmail.com"
+                },
+                {
+                    "name": "Alexander Makarov",
+                    "email": "sam@rmcreative.ru",
+                    "homepage": "http://rmcreative.ru/"
+                },
+                {
+                    "name": "Antonio Ramirez",
+                    "email": "amigo.cobos@gmail.com"
+                },
+                {
                     "name": "Qiang Xue",
-                    "email": "qiang.xue@gmail.com"
+                    "email": "qiang.xue@gmail.com",
+                    "homepage": "http://www.yiiframework.com/"
                 }
             ],
             "description": "The Twitter Bootstrap extension for the Yii framework",
@@ -412,7 +426,7 @@
                 "bootstrap",
                 "yii2"
             ],
-            "time": "2017-10-09T19:48:22+00:00"
+            "time": "2018-02-16T10:41:52+00:00"
         },
         {
             "name": "yiisoft/yii2-composer",
