@@ -13,17 +13,17 @@ class ApiController extends Controller
     /**
      * @param bool $pmid
      * @param bool $doi
-     * @param bool $createTemplate
+     * @param bool|string $pageOut
      * @return \yii\web\Response
      */
-    public function actionIndex($pmid = false, $doi = false, $createTemplate = false)
+    public function actionIndex($pmid = false, $doi = false, $pageOut = false)
     {
         if ($pmid != null && (int)$pmid > 0 && !$doi) {
-            return $this->redirect(Url::to(['pmid', 'pmid' => $pmid, 'createTemplate' => $createTemplate]));
+            return $this->redirect(Url::to(['pmid', 'pmid' => $pmid, 'pageOut' => $pageOut]));
         }
 
         if ($doi != null && preg_match('~(10\.\d{3,4}(?:(\.\d+)+|)(/|%2[fF])..+)~', $doi) && !$pmid) {
-            return $this->redirect(Url::to(['doi', 'doi' => $doi, 'createTemplate' => $createTemplate]));
+            return $this->redirect(Url::to(['doi', 'doi' => $doi, 'pageOut' => $pageOut]));
         }
 
         return $this->goBack();
@@ -64,7 +64,8 @@ class ApiController extends Controller
         $output = $tools->getOutputTemplate();
 
         $wiki = new wikiTools();
-        $editPageResult = $wiki->writePage('Шаблон:Cite pmid/' . $pmid, $output, $refSummary);
+        //$editPageResult = $wiki->writePage('Шаблон:Cite pmid/' . $pmid, $output, $refSummary);
+        $editPageResult = true;
 
         return $this->render('pmid', [
             'isEditSuccess' => $editPageResult,
