@@ -60,45 +60,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
         return $this->render('index', [
-            'scenario' => '',
-            'doi'      => 2
-        ]);
-    }
-
-    /**
-     * Displays Bot page.
-     *
-     * @param null|string|int $pmid
-     * @param null|string     $doi
-     * @return string
-     */
-    public function actionApi($pmid = 1542678, $doi = null)
-    {
-        $tools = new Tools('api');
-
-        /* is PMID */
-        if ($pmid != null && (int)$pmid > 0) {
-            $tools->scenario = Tools::SCENARIO_PMID;
-            $tools->input = $pmid;
-            $doi = null;
-        }
-
-        /* is DOI */
-        if ($doi != null && preg_match('~(10\.\d{3,4}(?:(\.\d+)+|)(/|%2[fF])..+)~', $doi)) {
-            $tools->scenario = Tools::SCENARIO_DOI;
-            $tools->input = $doi;
-            $pmid = null;
-        }
-
-        /* is true input */
-        if ($pmid != null || $doi != null) {
-            $tools->read();
-        }
-
-        $output = $tools->getOutputTemplate();
-
-        return $this->render('index', [
-            'output' => $output,
+            'output' => false,
         ]);
     }
 
