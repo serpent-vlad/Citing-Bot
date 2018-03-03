@@ -6,7 +6,7 @@ then
 	webservice stop
 	echo -e "\nUpdating the code..."
     git pull origin master
-    composer update
+    composer update --lock
     php yii cache/flush-all
 	echo
 	read -r -p "OK to start the service? (Y/n)" response
