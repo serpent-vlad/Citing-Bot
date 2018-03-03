@@ -64,8 +64,7 @@ class ApiController extends Controller
         $output = $tools->getOutputTemplate();
 
         $wiki = new wikiTools();
-        //$editPageResult = $wiki->writePage('Шаблон:Cite pmid/' . $pmid, $output, $refSummary);
-        $editPageResult = true;
+        $editPageResult = $wiki->writePage('Шаблон:Cite pmid/' . $pmid, $output, $refSummary);
 
         return $this->render('pmid', [
             'isEditSuccess' => $editPageResult,
