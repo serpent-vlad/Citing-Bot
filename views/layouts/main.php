@@ -90,7 +90,7 @@ AppAsset::register($this);
             <div class="col-xs-5 col-md-3">
                 <div class="text-right">
                     <a href="https://wikitech.wikimedia.org/wiki/Portal:Cloud_VPS" target="_blank">
-                        <img height="40px" src="/img/VPS-badge.svg" alt="Powered by Wikimedia Cloud Services">
+                        <img height="40px" src="/citing-bot/img/VPS-badge.svg" alt="Powered by Wikimedia Cloud Services">
                     </a>
                 </div>
             </div>
