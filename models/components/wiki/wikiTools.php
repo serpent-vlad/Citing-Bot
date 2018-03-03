@@ -169,8 +169,8 @@ class wikiTools
             CURLOPT_COOKIESESSION => true,
             CURLOPT_COOKIEFILE    => 'cookie.txt',
             CURLOPT_COOKIEJAR     => 'cookiejar.txt',
-            CURLOPT_URL           => self::API_ROOT,
             CURLOPT_USERAGENT     => 'Citing Bot',
+            CURLOPT_URL           => self::API_ROOT,
         ]);
     }
 
@@ -229,16 +229,18 @@ class wikiTools
             }
         }
         if (!isset($response->batchcomplete)) {
-            Yii::warning('Write request triggered no response from server');
+            Yii::warning('Write request triggered no response from server', __METHOD__);
             return false;
         }
 
         $myPage = reset($response->query->pages);
 
+        /* ToDo: продумать момент не существования страницы
         if (!isset($myPage->lastrevid)) {
-            Yii::warning('Page seems not to exist. Aborting.');
+            Yii::warning('Page seems not to exist. Aborting.', __METHOD__);
             return false;
         }
+        */
 
         $submit_vars = [
             'action'    => 'edit',
@@ -255,20 +257,18 @@ class wikiTools
 
         if (isset($result->error)) {
             Yii::warning('Write error: ' .
-                htmlspecialchars(strtoupper($result->error->code)) . ': ' . str_replace(['You ', ' have '], ['This bot ', ' has '], htmlspecialchars($result->error->info)));
+                htmlspecialchars(strtoupper($result->error->code)) . ': ' . str_replace(['You ', ' have '], ['This bot ', ' has '], htmlspecialchars($result->error->info)), __METHOD__);
             return false;
         } elseif (isset($result->edit)) {
             if (isset($result->edit->captcha)) {
-                Yii::warning("Write error: We encountered a captcha, so can't be properly logged in.");
+                Yii::warning('Write error: We encountered a captcha, so can\'t be properly logged in.', __METHOD__);
                 return false;
             } elseif ($result->edit->result == 'Success') {
                 // Need to check for this string whereever our behaviour is dependant on the success or failure of the write operation
-                if (true == true) { // TODO: переделать
-                    //
-                } else echo "\n Written to " . htmlspecialchars($myPage->title) . '.  ';
+                // echo "\n Written to " . htmlspecialchars($myPage->title) . '.  ';
                 return true;
             } elseif (isset($result->edit->result)) {
-                echo "\n ! " . htmlspecialchars($result->edit->result);
+                Yii::warning($result->edit->result, __METHOD__);
                 return false;
             }
         } else {

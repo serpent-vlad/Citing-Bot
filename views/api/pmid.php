@@ -1,10 +1,18 @@
 <?php
 
 /* @var $this yii\web\View */
+/* @var $isEditSuccess boolean */
 
 $this->title = 'PMID parser';
 ?>
 <div class="api-pmid">
+
+    <?php if ($isEditSuccess): ?>
+        <div class="alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            Страница подшаблона успешно создана!
+        </div>
+    <?php endif; ?>
 
     <?php if ($output): ?>
         <div class="form-group">

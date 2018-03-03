@@ -98,7 +98,7 @@ class Template extends BaseModel
         if ($this->issn) $output .= '|issn=' . $this->issn . PHP_EOL;
         if ($this->isbn) $output .= '|doi=' . $this->isbn . PHP_EOL;
 
-        $output .= '}}';
+        $output .= '}}<noinclude>{{doc|Шаблон:cite_pmid/subpage}}</noinclude>';
 
         return $output;
     }

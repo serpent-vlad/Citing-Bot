@@ -33,11 +33,12 @@ class ApiController extends Controller
      * Displays Bot page for PMID.
      *
      * @param null|string|int $pmid
-     * @param bool            $createTemplate
+     * @param bool|string     $pageOut
      * @return string
+     * @throws \OAuthException
      * @throws \yii\base\Exception
      */
-    public function actionPmid($pmid = 0, $createTemplate = false)
+    public function actionPmid($pmid = 0, $pageOut = false)
     {
 
         if ((int)$pmid < 1) {
@@ -49,6 +50,12 @@ class ApiController extends Controller
             ]);
         }
 
+        if ($pageOut) {
+            $refSummary = 'Новая подстраница шаблона {{Cite pmid}} для статьи [[' . $pageOut . ']]';
+        } else {
+            $refSummary = 'Создана новая подстраница шаблона {{Cite pmid}}';
+        }
+
         $tools = new Tools('api');
         $tools->scenario = Tools::SCENARIO_PMID;
         $tools->input = $pmid;
@@ -56,19 +63,12 @@ class ApiController extends Controller
         $tools->read();
         $output = $tools->getOutputTemplate();
 
-        if ((bool)$createTemplate) {
-            $wiki = new wikiTools();
-
-            $editPageResult = $wiki->writePage('Участник:Serpent Vlad/temp/песочница1', $output);
-
-            if (!$editPageResult) {
-                echo 'Error!';
-                exit;
-            }
-        }
+        $wiki = new wikiTools();
+        $editPageResult = $wiki->writePage('Шаблон:Cite pmid/' . $pmid, $output, $refSummary);
 
         return $this->render('pmid', [
-            'output' => $output,
+            'isEditSuccess' => $editPageResult,
+            'output'        => $output,
         ]);
     }
 
