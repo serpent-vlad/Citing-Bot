@@ -2,6 +2,7 @@
 
 /* @var $this yii\web\View */
 /* @var $isEditSuccess boolean */
+/* @var $pmid int */
 
 $this->title = 'PMID parser';
 ?>
@@ -10,7 +11,8 @@ $this->title = 'PMID parser';
     <?php if ($isEditSuccess): ?>
         <div class="alert alert-success alert-dismissable">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            Страница подшаблона успешно создана!
+            <a href="https://ru.wikipedia.org/wiki/Шаблон:Cite_pmid/<?= $pmid ?>" target="_blank">Страница подшаблона</a>
+            успешно создана!
         </div>
     <?php endif; ?>
 

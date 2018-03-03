@@ -1,10 +1,20 @@
 <?php
 
 /* @var $this yii\web\View */
+/* @var $isEditSuccess boolean */
+/* @var $doi int */
 
 $this->title = 'DOI parser';
 ?>
 <div class="api-doi">
+
+    <?php if ($isEditSuccess): ?>
+        <div class="alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <a href="https://ru.wikipedia.org/wiki/Шаблон:Cite_doi/<?= $doi ?>" target="_blank">Страница подшаблона</a>
+            успешно создана!
+        </div>
+    <?php endif; ?>
 
     <?php if ($output): ?>
         <div class="form-group">

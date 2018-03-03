@@ -55,7 +55,7 @@ class Tools
         $template = new Template();
         $template->attributes = $this->attributes;
 
-        $this->output = $template->getOutput();
+        $this->output = $template->getOutput($this->scenario);
 
         return $this->output;
     }

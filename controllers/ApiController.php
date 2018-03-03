@@ -69,10 +69,11 @@ class ApiController extends Controller
         return $this->render('pmid', [
             'isEditSuccess' => $editPageResult,
             'output'        => $output,
+            'pmid'          => $pmid,
         ]);
     }
 
-    public function actionDoi($doi = 0, $createTemplate = false)
+    public function actionDoi($doi = 0, $pageOut = false)
     {
 
         if (!preg_match('~(10\.\d{3,4}(?:(\.\d+)+|)(/|%2[fF])..+)~', (string)$doi)) {
@@ -84,6 +85,12 @@ class ApiController extends Controller
             ]);
         }
 
+        if ($pageOut) {
+            $refSummary = 'Новая подстраница шаблона {{Cite doi}} для статьи [[' . $pageOut . ']]';
+        } else {
+            $refSummary = 'Создана новая подстраница шаблона {{Cite doi}}';
+        }
+
         $tools = new Tools('api');
         $tools->scenario = Tools::SCENARIO_DOI;
         $tools->input = $doi;
@@ -91,19 +98,13 @@ class ApiController extends Controller
         $tools->read();
         $output = $tools->getOutputTemplate();
 
-        if ((bool)$createTemplate) {
-            $wiki = new wikiTools();
-
-            $editPageResult = $wiki->writePage('Участник:Serpent Vlad/temp/песочница1', $output);
-
-            if (!$editPageResult) {
-                echo 'Error!';
-                exit;
-            }
-        }
+        $wiki = new wikiTools();
+        $editPageResult = $wiki->writePage('Шаблон:Cite doi/' . $doi, $output, $refSummary);
 
         return $this->render('doi', [
-            'output' => $output,
+            'isEditSuccess' => $editPageResult,
+            'output'        => $output,
+            'doi'           => $doi,
         ]);
     }
 }

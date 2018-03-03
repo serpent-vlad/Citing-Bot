@@ -78,8 +78,23 @@ class Template extends BaseModel
         }
     }
 
-    public function getOutput()
+    /**
+     * @param bool|Tools::$scenario $type
+     * @return string
+     */
+    public function getOutput($type = false)
     {
+        $categoryTemplate = '';
+        switch ($type) {
+            case Tools::SCENARIO_PMID:
+                $categoryTemplate = '<noinclude>{{doc|Шаблон:Cite_pmid/subpage}}</noinclude>';
+                break;
+
+            case Tools::SCENARIO_DOI:
+                $categoryTemplate = '<noinclude>{{doc|Шаблон:Cite_doi/subpage}}</noinclude>';
+                break;
+        }
+
         $output = '{{статья' . PHP_EOL
             . '|автор=' . $this->authorsFormat() . PHP_EOL
             . '|заглавие=' . $this->title . PHP_EOL;
@@ -98,7 +113,8 @@ class Template extends BaseModel
         if ($this->issn) $output .= '|issn=' . $this->issn . PHP_EOL;
         if ($this->isbn) $output .= '|doi=' . $this->isbn . PHP_EOL;
 
-        $output .= '}}<noinclude>{{doc|Шаблон:cite_pmid/subpage}}</noinclude>';
+        $output .= '}}';
+        $output .= $categoryTemplate;
 
         return $output;
     }
