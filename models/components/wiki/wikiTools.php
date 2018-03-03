@@ -96,7 +96,7 @@ class wikiTools
 
                     /* $header = 'Authentication: ' . $this->oauth->getRequestHeader(OAUTH_HTTP_METHOD_POST, self::API_ROOT, http_build_query($params)); */
 
-                    $request = Request::fromConsumerAndToken($this->consumer, $this->accessToken, 'POST', self::API_ROOT, http_build_query($params));
+                    $request = Request::fromConsumerAndToken($this->consumer, $this->accessToken, 'POST', self::API_ROOT, $params);
                     $request->signRequest(new HmacSha1(), $this->consumer, $this->accessToken);
                     $this->authorizationHeader = $request->toHeader();
 

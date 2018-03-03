@@ -35,7 +35,6 @@ class ApiController extends Controller
      * @param null|string|int $pmid
      * @param bool|string     $pageOut
      * @return string
-     * @throws \OAuthException
      * @throws \yii\base\Exception
      */
     public function actionPmid($pmid = 0, $pageOut = false)
@@ -77,7 +76,6 @@ class ApiController extends Controller
      * @param int  $doi
      * @param bool $pageOut
      * @return string
-     * @throws \OAuthException
      * @throws \yii\base\Exception
      */
     public function actionDoi($doi = 0, $pageOut = false)
