@@ -118,7 +118,7 @@ class Doi extends Cite
      */
     protected function getDoiFromCrossRef()
     {
-        $url = 'https://api.crossref.org/works/' . urldecode($this->doi);
+        $url = 'https://api.crossref.org/works/' . urlencode($this->doi);
 
         $response = Yii::$app->cache->getOrSet(self::CACHE_TAG_ONE_DOI . md5($this->doi), function () use ($url) {
             $curl = curl_init();

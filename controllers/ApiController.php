@@ -11,8 +11,8 @@ use models\components\wiki\wikiTools;
 class ApiController extends Controller
 {
     /**
-     * @param bool $pmid
-     * @param bool $doi
+     * @param bool        $pmid
+     * @param bool        $doi
      * @param bool|string $pageOut
      * @return \yii\web\Response
      */
@@ -73,15 +73,16 @@ class ApiController extends Controller
     }
 
     /**
-     * @param int  $doi
-     * @param bool $pageOut
+     * @param string $doi
+     * @param bool   $pageOut
      * @return string
      * @throws \yii\base\Exception
      */
-    public function actionDoi($doi = 0, $pageOut = false)
+    public function actionDoi($doi = '', $pageOut = false)
     {
+        $doi = (string)urldecode($doi);
 
-        if (!preg_match('~(10\.\d{3,4}(?:(\.\d+)+|)(/|%2[fF])..+)~', (string)$doi)) {
+        if (!preg_match('~(10\.\d{3,4}(?:(\.\d+)+|)(/|%2[fF])..+)~', $doi)) {
             Yii::$app->response->statusCode = 404;
             return $this->render('empty', [
                 'params' => [
