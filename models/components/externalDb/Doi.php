@@ -168,7 +168,7 @@ class Doi extends Cite
                 }
             }
 
-            if ($message->{'container-title'}) {
+            if (isset($message->{'container-title'})) {
                 if (is_string($message->{'container-title'})) {
                     $this->edition = $message->{'container-title'};
                 } elseif (is_array($message->{'container-title'})) {
@@ -176,7 +176,7 @@ class Doi extends Cite
                 }
             }
 
-            if ($message->{'original-title'}) {
+            if (isset($message->{'original-title'})) {
                 if (is_string($message->{'original-title'})) {
                     $this->titleOriginal = $message->{'original-title'};
                 } elseif (is_array($message->{'original-title'})) {
@@ -195,7 +195,7 @@ class Doi extends Cite
                 $this->pages = str_replace('-', '—', $pages);
             }
 
-            if ($message->ISSN) {
+            if (isset($message->ISSN)) {
                 if (is_string($message->ISSN)) {
                     $this->issn = $message->ISSN;
                 } elseif (is_array($message->ISSN)) {
@@ -203,7 +203,7 @@ class Doi extends Cite
                 }
             }
 
-            if ($message->ISBN) {
+            if (isset($message->ISBN)) {
                 if (is_string($message->ISBN)) {
                     $this->isbn = $message->ISBN;
                 } elseif (is_array($message->ISBN)) {
