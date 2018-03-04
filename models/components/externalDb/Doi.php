@@ -171,7 +171,7 @@ class Doi extends Cite
             if (isset($message->{'container-title'})) {
                 if (is_string($message->{'container-title'})) {
                     $this->edition = $message->{'container-title'};
-                } elseif (is_array($message->{'container-title'})) {
+                } elseif (is_array($message->{'container-title'}) && isset($message->{'container-title'}[0])) {
                     $this->edition = $message->{'container-title'}[0];
                 }
             }
@@ -179,7 +179,7 @@ class Doi extends Cite
             if (isset($message->{'original-title'})) {
                 if (is_string($message->{'original-title'})) {
                     $this->titleOriginal = $message->{'original-title'};
-                } elseif (is_array($message->{'original-title'})) {
+                } elseif (is_array($message->{'original-title'}) && isset($message->{'original-title'}[0])) {
                     $this->titleOriginal = $message->{'original-title'}[0];
                 }
             }
@@ -198,7 +198,7 @@ class Doi extends Cite
             if (isset($message->ISSN)) {
                 if (is_string($message->ISSN)) {
                     $this->issn = $message->ISSN;
-                } elseif (is_array($message->ISSN)) {
+                } elseif (is_array($message->ISSN) && isset($message->ISSN[0])) {
                     $this->issn = $message->ISSN[0];
                 }
             }
@@ -206,7 +206,7 @@ class Doi extends Cite
             if (isset($message->ISBN)) {
                 if (is_string($message->ISBN)) {
                     $this->isbn = $message->ISBN;
-                } elseif (is_array($message->ISBN)) {
+                } elseif (is_array($message->ISBN) && isset($message->ISBN[0])) {
                     $this->isbn = $message->ISBN[0];
                 }
             }
