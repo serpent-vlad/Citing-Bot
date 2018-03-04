@@ -10,7 +10,7 @@ $config = [
     'id'         => 'citing-bot',
     'basePath'   => dirname(__DIR__),
     'bootstrap'  => ['log'],
-    'version'    => '1.1.1-alpha',
+    'version'    => '1.2.0-alpha',
     'name'       => 'Citing Bot',
     'aliases'    => [
         '@bower'  => '@vendor/bower-asset',
@@ -34,7 +34,10 @@ $config = [
         ],
         'mailer'       => [
             'class'            => 'yii\swiftmailer\Mailer',
-            'useFileTransport' => true,
+            'messageConfig'    => [
+                'charset' => 'UTF-8',
+                'from'    => 'tools.citing-bot@wmflabs.org',
+            ],
         ],
         'log'          => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -42,6 +45,20 @@ $config = [
                 [
                     'class'  => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                ],
+                [
+                    'class'   => 'yii\log\EmailTarget',
+                    'levels'  => ['error', 'warning'],
+                    'logVars' => ['_GET'],
+                    'message' => [
+                        'from'    => ['tools.citing-bot@wmflabs.org'],
+                        'to'      => ['kekaadrenalin@tools.wmflabs.org'],
+                        'subject' => 'Ошибка citing-bot',
+                    ],
+                    'except'  => [
+                        'yii\web\HttpException:404',
+                        'yii\db\*',
+                    ],
                 ],
             ],
         ],
@@ -62,15 +79,11 @@ if (YII_ENV_DEV) {
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 }
 
