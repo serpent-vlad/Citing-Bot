@@ -68,6 +68,7 @@ $config = [
             'showScriptName'  => false,
             'rules'           => [
                 'api/pmid/<pmid:\d+>' => 'api/pmid',
+                'api/doi/<doi:.+>' => 'api/doi',
             ],
         ],
     ],
