@@ -164,7 +164,11 @@ class Doi extends Cite
 
             if (isset($message->author)) {
                 foreach ($message->author as $author) {
-                    $this->author[] = $author->family . ' ' . $author->given;
+                    if (isset($author->family) && isset($author->given)) {
+                        $this->author[] = $author->family . ' ' . $author->given;
+                    } elseif (isset($author->name)) {
+                        $this->author[] = $author->name;
+                    }
                 }
             }
 
