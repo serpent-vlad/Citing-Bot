@@ -22,7 +22,7 @@ class ApiController extends Controller
             return $this->redirect(Url::to(['pmid', 'pmid' => $pmid, 'pageOut' => $pageOut]));
         }
 
-        if ($doi != null && preg_match('~(10\.\d{3,4}(?:(\.\d+)+|)(/|%2[fF])..+)~', $doi) && !$pmid) {
+        if ($doi != null && preg_match('~(10\.\d{3,4}(?:(\.\d+)+|)(/|%2[fF])..+)~', urldecode($doi)) && !$pmid) {
             return $this->redirect(Url::to(['doi', 'doi' => $doi, 'pageOut' => $pageOut]));
         }
 
@@ -39,7 +39,6 @@ class ApiController extends Controller
      */
     public function actionPmid($pmid = 0, $pageOut = false)
     {
-
         if ((int)$pmid < 1) {
             Yii::$app->response->statusCode = 404;
             return $this->render('empty', [
