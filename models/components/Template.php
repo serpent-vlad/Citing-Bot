@@ -124,7 +124,7 @@ class Template extends BaseModel
         $authors = $this->author;
         $output = [];
 
-        foreach ($authors as $key => $author) {
+        if (is_array($authors) && count($authors) > 0) foreach ($authors as $key => $author) {
             $output[$key] = '{{nobr|' . $author . '}}';
         }
 
