@@ -22,6 +22,10 @@ class CronController extends Controller
      * @var string Название категории со статьями с необработанным шаблоном Cite pmid
      */
     private $pmidCategory = 'Категория:Википедия:Статьи с необработанным шаблоном Cite pmid';
+    /**
+     * @var string Название категории со статьями с необработанным шаблоном Cite doi
+     */
+    private $doiCategory = 'Категория:Википедия:Статьи с необработанным шаблоном Cite doi';
 
     /**
      * @param string $actionID
@@ -92,6 +96,59 @@ class CronController extends Controller
                 $output = $tools->getOutputTemplate();
 
                 $editPageResult[$page->title] = $wiki->writePage('Шаблон:Cite pmid/' . $pmid, $output, $refSummary);
+            }
+        }
+
+        print_r($editPageResult);
+
+        return 1;
+    }
+
+    /**
+     * Заполняет необработанные шаблоны Cite doi
+     *
+     * @return int
+     */
+    public function actionDoi()
+    {
+        $wiki = new wikiTools();
+
+        $categoryJson = $wiki->getAllPagesFromCategory($this->doiCategory, $this->limit);
+        if (isset($categoryJson->error)) {
+            Yii::warning($categoryJson->error, __METHOD__);
+            return 0;
+        }
+
+        $pages = $categoryJson->query->categorymembers;
+        if (count($pages) === 0) return 0;
+
+        $ids = array_map(function ($page) {
+            return $page->pageid;
+        }, $pages);
+
+        $resultJson = $wiki->getPagesContentById(implode('|', $ids));
+        if (isset($resultJson->error)) {
+            Yii::warning($categoryJson->error, __METHOD__);
+            return 0;
+        }
+
+        $editPageResult = [];
+        $pattern = '/{{[ ]?cite(?:[_]?|[ ]*)doi[ ]?\|[ ]?(10.\d{4,9}\/[-._;()\/:A-Z0-9]+)[ ]?(?:\|[ ]?(noedit))?[ ]?}}/is';
+
+        foreach ($resultJson->query->pages as $pageId => $page) {
+            preg_match_all($pattern, $page->revisions[0]->{'*'}, $matches);
+            foreach ($matches[1] as $matchId => $doi) {
+                if (!preg_match('~^10.\d{4,9}/[-._;()/:A-Z0-9]+$~i', $doi)) break;
+                $refSummary = 'Новая подстраница шаблона {{Cite doi}} для статьи [[' . $page->title . ']]';
+
+                $tools = new Tools('api');
+                $tools->scenario = Tools::SCENARIO_DOI;
+                $tools->input = $doi;
+
+                $tools->read();
+                $output = $tools->getOutputTemplate();
+
+                $editPageResult[$page->title] = $wiki->writePage('Шаблон:Cite doi/' . $doi, $output, $refSummary);
             }
         }
 
