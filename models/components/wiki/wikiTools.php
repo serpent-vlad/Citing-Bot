@@ -31,22 +31,28 @@ class wikiTools
 
         $this->consumer = new Consumer($oauth_consumer_token, $oauth_consumer_secret);
         $this->accessToken = new Token($oauth_access_token, $oauth_access_secret);
+    }
 
-        //$this->conf = new ClientConfig( $endpoint );
+    /**
+     * @param bool $search
+     * @param int  $limit
+     * @return bool|mixed|null
+     */
+    public function getAllPagesFromCategory($search = false, $limit = 50)
+    {
+        if (is_string($search) && strlen($search) > 0) {
+            $keySearch = 'cmtitle';
+        } elseif (is_int($search) && $search > 0) {
+            $keySearch = 'cmpageid';
+        } else return null;
 
-        /*
-        $request = Request::fromConsumerAndToken( $this->consumer, $this->accessToken, 'GET', 'https://en.wikipedia.org/w/api.php', $apiParams );
-        $request->signRequest( new HmacSha1(), $consumer, $accessToken );
-        $authorizationHeader = $request->toHeader();
-
-        /*
-        $this->oauth = new OAuth($oauth_consumer_token, $oauth_consumer_secret,
-            OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_AUTHORIZATION);
-        $this->oauth->setToken($oauth_access_token, $oauth_access_secret);
-        $this->oauth->enableDebug();
-        $this->oauth->setSSLChecks(0);
-        $this->oauth->setRequestEngine(OAUTH_REQENGINE_CURL);
-        */
+        return $this->fetch([
+            'action'   => 'query',
+            'list'     => 'categorymembers',
+            'format'   => 'json',
+            'cmlimit'  => $limit,
+            $keySearch => $search,
+        ]);
     }
 
     /**
@@ -176,6 +182,21 @@ class wikiTools
     {
         $userQuery = $this->fetch(['action' => 'query', 'meta' => 'userinfo']);
         return (isset($userQuery->query->userinfo->name)) ? $userQuery->query->userinfo->name : false;
+    }
+
+    /**
+     * @param string|int $ids
+     * @return bool|mixed|null
+     */
+    public function getPagesContentById($ids = '')
+    {
+        return $this->fetch([
+            'action'  => 'query',
+            'prop'    => 'revisions',
+            'format'  => 'json',
+            'rvprop'  => 'content',
+            'pageids' => $ids,
+        ]);
     }
 
     /**
