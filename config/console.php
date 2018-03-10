@@ -36,7 +36,7 @@ $config = [
                 [
                     'class'   => 'yii\log\EmailTarget',
                     'levels'  => ['error', 'warning'],
-                    'logVars' => ['_GET'],
+                    'logVars' => [],
                     'message' => [
                         'from'    => ['tools.citing-bot@wmflabs.org'],
                         'to'      => ['kekaadrenalin@tools.wmflabs.org'],
