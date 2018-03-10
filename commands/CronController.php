@@ -57,7 +57,7 @@ class CronController extends Controller
     {
         $wiki = new wikiTools();
 
-        $categoryJson = Json::decode($wiki->getAllPagesFromCategory($this->pmidCategory, $this->limit));
+        $categoryJson = $wiki->getAllPagesFromCategory($this->pmidCategory, $this->limit);
         if (isset($categoryJson->error)) {
             Yii::warning($categoryJson->error, __METHOD__);
             return 0;
@@ -70,7 +70,7 @@ class CronController extends Controller
             return $page->pageid;
         }, $pages);
 
-        $resultJson = Json::decode($wiki->getPagesContentById(implode('|', $ids)));
+        $resultJson = $wiki->getPagesContentById(implode('|', $ids));
         if (isset($resultJson->error)) {
             Yii::warning($categoryJson->error, __METHOD__);
             return 0;

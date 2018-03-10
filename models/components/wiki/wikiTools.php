@@ -7,6 +7,7 @@ use MediaWiki\OAuthClient\Consumer;
 use MediaWiki\OAuthClient\Request;
 use MediaWiki\OAuthClient\Token;
 use MediaWiki\OAuthClient\SignatureMethod\HmacSha1;
+use yii\helpers\Json;
 
 class wikiTools
 {
@@ -90,7 +91,7 @@ class wikiTools
                         CURLOPT_HTTPHEADER => [$this->authorizationHeader],
                     ]);
 
-                    $response = @json_decode($data = curl_exec($this->ch));
+                    $response = Json::decode($data = curl_exec($this->ch), false);
                     if (!$data) {
                         Yii::warning('Curl error: ' . htmlspecialchars(curl_error($this->ch)));
                         return false;
@@ -112,7 +113,7 @@ class wikiTools
                         CURLOPT_HTTPHEADER => [$this->authorizationHeader],
                     ]);
 
-                    $response = @json_decode($data = curl_exec($this->ch));
+                    $response = Json::decode($data = curl_exec($this->ch), false);
                     if (!$data) {
                         echo "\n ! Curl error: " . htmlspecialchars(curl_error($this->ch));
                         Yii::$app->end(0);
