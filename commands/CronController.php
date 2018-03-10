@@ -15,10 +15,6 @@ use models\components\wiki\wikiTools;
 class CronController extends Controller
 {
     /**
-     * @var string
-     */
-    public $defaultAction = 'index';
-    /**
      * @var int
      */
     public $limit = 50;

@@ -1,28 +1,57 @@
 <?php
 
-$params = require __DIR__ . '/params.php';
+$params = array_merge(
+    require(__DIR__ . '/params.php'),
+    require(__DIR__ . '/params-local.php')
+);
 $db = require __DIR__ . '/db.php';
 
 $config = [
-    'id' => 'citing-bot',
-    'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'id'                  => 'citing-bot',
+    'basePath'            => dirname(__DIR__),
+    'bootstrap'           => ['log'],
+    'version'             => '1.3.0-beta',
+    'name'                => 'Citing Bot',
     'controllerNamespace' => 'app\commands',
-    'components' => [
-        'cache' => [
+    'aliases'             => [
+        '@models' => '@app/models',
+    ],
+    'components'          => [
+        'cache'  => [
             'class' => 'yii\caching\FileCache',
         ],
-        'log' => [
+        'mailer' => [
+            'class'         => 'yii\swiftmailer\Mailer',
+            'messageConfig' => [
+                'charset' => 'UTF-8',
+                'from'    => 'tools.citing-bot@wmflabs.org',
+            ],
+        ],
+        'log'    => [
             'targets' => [
                 [
-                    'class' => 'yii\log\FileTarget',
+                    'class'  => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                ],
+                [
+                    'class'   => 'yii\log\EmailTarget',
+                    'levels'  => ['error', 'warning'],
+                    'logVars' => ['_GET'],
+                    'message' => [
+                        'from'    => ['tools.citing-bot@wmflabs.org'],
+                        'to'      => ['kekaadrenalin@tools.wmflabs.org'],
+                        'subject' => 'Ошибка citing-bot',
+                    ],
+                    'except'  => [
+                        'yii\web\HttpException:404',
+                        'yii\db\*',
+                    ],
                 ],
             ],
         ],
-        'db' => $db,
+        'db'     => $db,
     ],
-    'params' => $params,
+    'params'              => $params,
 ];
 
 if (YII_ENV_DEV) {
