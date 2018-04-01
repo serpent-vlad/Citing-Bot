@@ -48,7 +48,7 @@ class Pubmed extends Cite
         $xml = @simplexml_load_file("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?tool=Citing_Bot&email={$email}&api_key={$apiKey}&db=pubmed&id={$this->id}");
 
         if ($xml === false) {
-            throw new Exception('Fatal error in function <Pubmed/loadFromPubmedById>: unable to do PubMed search');
+            throw new Exception('Fatal error in function <Pubmed/loadFromPubmedById>: unable to do PubMed search for #' . $this->id);
         }
 
         $this->url = "https://www.ncbi.nlm.nih.gov/pubmed/{$this->id}";

@@ -154,7 +154,15 @@ class Doi extends Cite
         if ($response->status == 'ok') {
             $message = $response->message;
 
-            $this->title = strip_tags($message->title[0]);
+            if (is_array($message->title)) {
+                $this->title = strip_tags($message->title[0]);
+            } elseif (is_string($message->title)) {
+                $this->title = $message->title;
+            } else {
+                Yii::error("Not found Title in #{$this->doi}!", __METHOD__);
+                return false;
+            }
+
             $this->publisher = strip_tags($message->publisher);
             $this->url = $message->URL;
 
