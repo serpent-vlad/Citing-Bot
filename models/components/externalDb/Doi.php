@@ -154,7 +154,7 @@ class Doi extends Cite
         if ($response->status == 'ok') {
             $message = $response->message;
 
-            if (is_array($message->title)) {
+            if (is_array($message->title) && $message->title[0]) {
                 $this->title = strip_tags($message->title[0]);
             } elseif (is_string($message->title)) {
                 $this->title = $message->title;
