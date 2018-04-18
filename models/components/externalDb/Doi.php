@@ -160,7 +160,7 @@ class Doi extends Cite
                 $this->title = $message->title;
             } else {
                 Yii::error("Not found Title in #{$this->doi}!", __METHOD__);
-                return false;
+                $this->title = '';
             }
 
             $this->publisher = strip_tags($message->publisher);
