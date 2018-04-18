@@ -3,7 +3,6 @@
 namespace app\commands;
 
 use Yii;
-use yii\helpers\Json;
 use yii\console\Controller;
 use models\components\Tools;
 use models\components\wiki\wikiTools;
