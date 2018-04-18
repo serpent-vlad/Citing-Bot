@@ -52,7 +52,7 @@ class Doi extends Cite
         $this->doi = $this->id;
 
         if (!$this->verifyDoi()) {
-            throw new Exception('Fatal error in function <Doi/loadFromDoiById>: no verify DOI');
+            throw new Exception('Fatal error in function <Doi/loadFromDoiById>: no verify DOI #' . $this->doi);
         }
     }
 
