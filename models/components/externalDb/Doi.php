@@ -196,6 +196,16 @@ class Doi extends Cite
                 }
             }
 
+            if (isset($message->language)) {
+                if (is_string($message->language)) {
+                    $this->lang[0] = $message->language;
+                } elseif (is_array($message->language) && isset($message->language[0])) {
+                    $this->lang[0] = $message->language[0];
+                }
+            } else {
+                $this->lang[0] = 'en';
+            }
+
             if (isset($message->issue))
                 $this->issue = $message->issue;
 
