@@ -83,7 +83,9 @@ class CronController extends Controller
         $pattern = '/{{[ ]?cite(?:[_]?|[ ]*)pmid[ ]?\|[ ]?(\d+)[ ]?(?:\|[ ]?(noedit))?[ ]?}}/is';
 
         foreach ($resultJson->query->pages as $pageId => $page) {
-            preg_match_all($pattern, $page->revisions[0]->{'*'}, $matches);
+            $contentPage = $page->revisions[0]->{'*'};
+            preg_match_all($pattern, $contentPage, $matches);
+
             foreach ($matches[1] as $matchId => $pmid) {
                 $refSummary = 'Новая подстраница шаблона {{Cite pmid}} для статьи [[' . $page->title . ']]';
 
@@ -94,7 +96,7 @@ class CronController extends Controller
                 $tools->read();
                 $output = $tools->getOutputTemplate();
 
-                $editPageResult[$page->title] = $wiki->writePage('Шаблон:Cite pmid/' . $pmid, $output, $refSummary);
+                $editPageResult[$page->title] = $wiki->writePage('Шаблон:Cite pmid/' . $pmid, $output, $refSummary, false);
             }
         }
 
@@ -135,7 +137,9 @@ class CronController extends Controller
         $pattern = '/{{[ ]?cite(?:[_]?|[ ]*)doi[ ]?\|[ ]?(10.\d{4,9}\/[-._;()\/:A-Z0-9]+)[ ]?(?:\|[ ]?(noedit))?[ ]?}}/is';
 
         foreach ($resultJson->query->pages as $pageId => $page) {
-            preg_match_all($pattern, $page->revisions[0]->{'*'}, $matches);
+            $contentPage = $page->revisions[0]->{'*'};
+            preg_match_all($pattern, $contentPage, $matches);
+
             foreach ($matches[1] as $matchId => $doi) {
                 if (!preg_match('~^10.\d{4,9}/[-._;()/:A-Z0-9]+$~i', $doi)) break;
                 $refSummary = 'Новая подстраница шаблона {{Cite doi}} для статьи [[' . $page->title . ']]';
@@ -147,7 +151,7 @@ class CronController extends Controller
                 $tools->read();
                 $output = $tools->getOutputTemplate();
 
-                $editPageResult[$page->title] = $wiki->writePage('Шаблон:Cite doi/' . $doi, $output, $refSummary);
+                $editPageResult[$page->title] = $wiki->writePage('Шаблон:Cite doi/' . $doi, $output, $refSummary, false);
             }
         }
 

@@ -204,9 +204,10 @@ class wikiTools
      * @param string $page
      * @param string $newText
      * @param string $summary
+     * @param bool   $isRewrite
      * @return bool
      */
-    public function writePage($page = 'Участник:Citing Bot/Черновик', $newText = 'Тест №1', $summary = 'Тест')
+    public function writePage($page = 'Участник:Citing Bot/Черновик', $newText = 'Тест №1', $summary = 'Тест', $isRewrite = true)
     {
         $response = $this->fetch([
             'action' => 'query',
@@ -232,12 +233,8 @@ class wikiTools
 
         $myPage = reset($response->query->pages);
 
-        /* ToDo: продумать момент не существования страницы
-        if (!isset($myPage->lastrevid)) {
-            Yii::warning('Page seems not to exist. Aborting.', __METHOD__);
-            return false;
-        }
-        */
+        // if not allowed to overwrite this page
+        if (!$isRewrite && !isset($myPage->lastrevid)) return false;
 
         $submit_vars = [
             'action'    => 'edit',
