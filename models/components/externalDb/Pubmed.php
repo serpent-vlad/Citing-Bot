@@ -167,8 +167,8 @@ class Pubmed extends Cite
         preg_match_all('/(\d+)/is', $pages, $pagesArray);
 
         if (!isset($pagesArray[1][0])) return '';
+        $pageSecond = $pageFirst = $pagesArray[1][0];
 
-        if (isset($pagesArray[1][0])) $pageSecond = $pageFirst = $pagesArray[1][0];
         if (isset($pagesArray[1][1])) $pageSecond = $pagesArray[1][1];
 
         $pageFirstLen = strlen($pageFirst);
