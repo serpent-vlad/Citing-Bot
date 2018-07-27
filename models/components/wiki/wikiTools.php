@@ -234,7 +234,7 @@ class wikiTools
         $myPage = reset($response->query->pages);
 
         // if not allowed to overwrite this page
-        if (!$isRewrite && !isset($myPage->lastrevid)) return false;
+        if (!$isRewrite && isset($myPage->lastrevid)) return false;
 
         $submit_vars = [
             'action'    => 'edit',
