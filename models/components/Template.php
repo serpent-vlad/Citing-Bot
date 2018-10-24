@@ -111,7 +111,7 @@ class Template extends BaseModel
         if ($this->pmid) $output .= '|pmid=' . $this->pmid . PHP_EOL;
         if ($this->doi) $output .= '|doi=' . $this->doi . PHP_EOL;
         if ($this->issn) $output .= '|issn=' . $this->issn . PHP_EOL;
-        if ($this->isbn) $output .= '|doi=' . $this->isbn . PHP_EOL;
+        if ($this->isbn) $output .= '|isbn=' . $this->isbn . PHP_EOL;
 
         $output .= '}}';
         $output .= $categoryTemplate;
