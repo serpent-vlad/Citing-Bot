@@ -31,3 +31,4 @@ tests/_support/_generated
 /backup/
 /config/params-local.php
 /replica.my.cnf
+cookiejar.txt

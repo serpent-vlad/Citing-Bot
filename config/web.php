@@ -10,7 +10,7 @@ $config = [
     'id'         => 'citing-bot',
     'basePath'   => dirname(__DIR__),
     'bootstrap'  => ['log'],
-    'version'    => '1.3.0-beta',
+    'version'    => '1.4.1-beta',
     'name'       => 'Citing Bot',
     'aliases'    => [
         '@bower'  => '@vendor/bower-asset',
@@ -33,8 +33,8 @@ $config = [
             'errorAction' => 'site/error',
         ],
         'mailer'       => [
-            'class'            => 'yii\swiftmailer\Mailer',
-            'messageConfig'    => [
+            'class'         => 'yii\swiftmailer\Mailer',
+            'messageConfig' => [
                 'charset' => 'UTF-8',
                 'from'    => 'tools.citing-bot@wmflabs.org',
             ],
@@ -68,7 +68,7 @@ $config = [
             'showScriptName'  => false,
             'rules'           => [
                 'api/pmid/<pmid:\d+>' => 'api/pmid',
-                'api/doi/<doi:.+>' => 'api/doi',
+                'api/doi/<doi:.+>'    => 'api/doi',
             ],
         ],
     ],

@@ -52,7 +52,7 @@ class Doi extends Cite
         $this->doi = $this->id;
 
         if (!$this->verifyDoi()) {
-            throw new Exception('Fatal error in function <Doi/loadFromDoiById>: no verify DOI');
+            throw new Exception('Fatal error in function <Doi/loadFromDoiById>: no verify DOI #' . $this->doi);
         }
     }
 
@@ -154,7 +154,15 @@ class Doi extends Cite
         if ($response->status == 'ok') {
             $message = $response->message;
 
-            $this->title = strip_tags($message->title[0]);
+            if (is_array($message->title) && isset($message->title[0])) {
+                $this->title = strip_tags($message->title[0]);
+            } elseif (is_string($message->title)) {
+                $this->title = $message->title;
+            } else {
+                Yii::error("Not found Title in #{$this->doi}!", __METHOD__);
+                $this->title = '';
+            }
+
             $this->publisher = strip_tags($message->publisher);
             $this->url = $message->URL;
 
@@ -186,6 +194,16 @@ class Doi extends Cite
                 } elseif (is_array($message->{'original-title'}) && isset($message->{'original-title'}[0])) {
                     $this->titleOriginal = $message->{'original-title'}[0];
                 }
+            }
+
+            if (isset($message->language)) {
+                if (is_string($message->language)) {
+                    $this->lang[0] = $message->language;
+                } elseif (is_array($message->language) && isset($message->language[0])) {
+                    $this->lang[0] = $message->language[0];
+                }
+            } else {
+                $this->lang[0] = 'en';
             }
 
             if (isset($message->issue))

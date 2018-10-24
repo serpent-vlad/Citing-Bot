@@ -7,6 +7,7 @@ use MediaWiki\OAuthClient\Consumer;
 use MediaWiki\OAuthClient\Request;
 use MediaWiki\OAuthClient\Token;
 use MediaWiki\OAuthClient\SignatureMethod\HmacSha1;
+use yii\helpers\Json;
 
 class wikiTools
 {
@@ -31,22 +32,28 @@ class wikiTools
 
         $this->consumer = new Consumer($oauth_consumer_token, $oauth_consumer_secret);
         $this->accessToken = new Token($oauth_access_token, $oauth_access_secret);
+    }
 
-        //$this->conf = new ClientConfig( $endpoint );
+    /**
+     * @param bool $search
+     * @param int  $limit
+     * @return bool|mixed|null
+     */
+    public function getAllPagesFromCategory($search = false, $limit = 50)
+    {
+        if (is_string($search) && strlen($search) > 0) {
+            $keySearch = 'cmtitle';
+        } elseif (is_int($search) && $search > 0) {
+            $keySearch = 'cmpageid';
+        } else return null;
 
-        /*
-        $request = Request::fromConsumerAndToken( $this->consumer, $this->accessToken, 'GET', 'https://en.wikipedia.org/w/api.php', $apiParams );
-        $request->signRequest( new HmacSha1(), $consumer, $accessToken );
-        $authorizationHeader = $request->toHeader();
-
-        /*
-        $this->oauth = new OAuth($oauth_consumer_token, $oauth_consumer_secret,
-            OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_AUTHORIZATION);
-        $this->oauth->setToken($oauth_access_token, $oauth_access_secret);
-        $this->oauth->enableDebug();
-        $this->oauth->setSSLChecks(0);
-        $this->oauth->setRequestEngine(OAUTH_REQENGINE_CURL);
-        */
+        return $this->fetch([
+            'action'   => 'query',
+            'list'     => 'categorymembers',
+            'format'   => 'json',
+            'cmlimit'  => $limit,
+            $keySearch => $search,
+        ]);
     }
 
     /**
@@ -84,7 +91,7 @@ class wikiTools
                         CURLOPT_HTTPHEADER => [$this->authorizationHeader],
                     ]);
 
-                    $response = @json_decode($data = curl_exec($this->ch));
+                    $response = Json::decode($data = curl_exec($this->ch), false);
                     if (!$data) {
                         Yii::warning('Curl error: ' . htmlspecialchars(curl_error($this->ch)));
                         return false;
@@ -106,7 +113,7 @@ class wikiTools
                         CURLOPT_HTTPHEADER => [$this->authorizationHeader],
                     ]);
 
-                    $response = @json_decode($data = curl_exec($this->ch));
+                    $response = Json::decode($data = curl_exec($this->ch), false);
                     if (!$data) {
                         echo "\n ! Curl error: " . htmlspecialchars(curl_error($this->ch));
                         Yii::$app->end(0);
@@ -179,12 +186,28 @@ class wikiTools
     }
 
     /**
+     * @param string|int $ids
+     * @return bool|mixed|null
+     */
+    public function getPagesContentById($ids = '')
+    {
+        return $this->fetch([
+            'action'  => 'query',
+            'prop'    => 'revisions',
+            'format'  => 'json',
+            'rvprop'  => 'content',
+            'pageids' => $ids,
+        ]);
+    }
+
+    /**
      * @param string $page
      * @param string $newText
      * @param string $summary
+     * @param bool   $isRewrite
      * @return bool
      */
-    public function writePage($page = 'Участник:Citing Bot/Черновик', $newText = 'Тест №1', $summary = 'Тест')
+    public function writePage($page = 'Участник:Citing Bot/Черновик', $newText = 'Тест №1', $summary = 'Тест', $isRewrite = true)
     {
         $response = $this->fetch([
             'action' => 'query',
@@ -210,12 +233,8 @@ class wikiTools
 
         $myPage = reset($response->query->pages);
 
-        /* ToDo: продумать момент не существования страницы
-        if (!isset($myPage->lastrevid)) {
-            Yii::warning('Page seems not to exist. Aborting.', __METHOD__);
-            return false;
-        }
-        */
+        // if not allowed to overwrite this page
+        if (!$isRewrite && isset($myPage->lastrevid)) return false;
 
         $submit_vars = [
             'action'    => 'edit',
