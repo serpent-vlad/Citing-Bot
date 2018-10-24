@@ -7,6 +7,15 @@ use yii\base\Exception;
 use models\components\externalDb\Doi;
 use models\components\externalDb\Pubmed;
 
+/**
+ * Class Tools
+ *
+ * @property $input    string
+ * @property $output   string
+ * @property $scenario int
+ *
+ * @package models\components
+ */
 class Tools
 {
     const SCENARIO_PMID = 10;
@@ -20,6 +29,13 @@ class Tools
 
     protected $attributes;
 
+    /**
+     * Tools constructor.
+     *
+     * @param bool $type
+     *
+     * @throws Exception
+     */
     public function __construct($type = false)
     {
         if (!$type) {
@@ -57,6 +73,7 @@ class Tools
     {
         $mem = memory_get_usage(false);
         $div = pow(1024, 2);
+
         return number_format($mem / $div, 2);
     }
 

@@ -62,7 +62,7 @@ class ApiController extends Controller
         $output = $tools->getOutputTemplate();
 
         $wiki = new wikiTools();
-        $editPageResult = $wiki->writePage('Шаблон:Cite pmid/' . $pmid, $output, $refSummary);
+        $editPageResult = $wiki->writePage('Шаблон:Cite pmid/' . $pmid, $output, $refSummary, false);
 
         return $this->render('pmid', [
             'isEditSuccess' => $editPageResult,
@@ -104,7 +104,7 @@ class ApiController extends Controller
         $output = $tools->getOutputTemplate();
 
         $wiki = new wikiTools();
-        $editPageResult = $wiki->writePage('Шаблон:Cite doi/' . $doi, $output, $refSummary);
+        $editPageResult = $wiki->writePage('Шаблон:Cite doi/' . $doi, $output, $refSummary, false);
 
         return $this->render('doi', [
             'isEditSuccess' => $editPageResult,
