@@ -33,11 +33,17 @@ $config = [
             'errorAction' => 'site/error',
         ],
         'mailer'       => [
-            'class'         => 'yii\swiftmailer\Mailer',
-            'messageConfig' => [
+            'class'            => 'yii\swiftmailer\Mailer',
+            'messageConfig'    => [
                 'charset' => 'UTF-8',
                 'from'    => 'citing-bot@tools.wmflabs.org',
             ],
+            'transport'        => [
+                'class' => 'Swift_SmtpTransport',
+                'host'  => 'mail.tools.wmflabs.org',
+                'port'  => '25',
+            ],
+            'useFileTransport' => false,
         ],
         'log'          => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
