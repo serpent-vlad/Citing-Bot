@@ -12,7 +12,7 @@ use yii\caching\TagDependency;
  */
 class Doi extends Cite
 {
-    const USER_AGENT = 'CitingBot/2.0 (https://ru.wikipedia.org/wiki/User:Citing_Bot; mailto:kekakop@outlook.com) BasedOnPHP/5.5';
+    const USER_AGENT = 'CitingBot/2.0 (https://ru.wikipedia.org/wiki/User:Citing_Bot; mailto:kekakop@outlook.com) BasedOnPHP/7.2';
 
     const CACHE_TAG_ALL_DOI = 'DOI_ALL_TAGS';
     const CACHE_TAG_ONE_DOI = 'doi_key-';
@@ -138,7 +138,7 @@ class Doi extends Cite
 
             $response = @json_decode($data = curl_exec($curl));
 
-            if (!$data) {
+            if (!isset($response->status) || !$data) {
                 Yii::warning('Curl error: ' . htmlspecialchars(curl_error($curl)));
                 return false;
             }
@@ -150,6 +150,8 @@ class Doi extends Cite
 
             return $response;
         }, 0, new TagDependency(['tags' => self::CACHE_TAG_ALL_DOI]));
+
+        if (!isset($response->status)) {}
 
         if ($response->status == 'ok') {
             $message = $response->message;
