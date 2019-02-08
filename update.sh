@@ -13,6 +13,6 @@ then
 	read -r -p "OK to start the service? (Y/n)" response
 	if ! [[ $response =~ ^([nN][oO]|[nN])$ ]]
 	then
-		webservice start
+		webservice --backend=kubernetes php7.2 start
 	fi
 fi

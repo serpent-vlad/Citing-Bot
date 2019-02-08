@@ -3,11 +3,11 @@
 namespace models\components\wiki;
 
 use Yii;
+use yii\helpers\Json;
 use MediaWiki\OAuthClient\Consumer;
 use MediaWiki\OAuthClient\Request;
 use MediaWiki\OAuthClient\Token;
 use MediaWiki\OAuthClient\SignatureMethod\HmacSha1;
-use yii\helpers\Json;
 
 class wikiTools
 {
@@ -15,7 +15,9 @@ class wikiTools
     const WIKI_ROOT = 'https://ru.wikipedia.org/wiki';
 
     protected $consumer;
+
     protected $accessToken;
+
     protected $authorizationHeader;
 
     protected $ch;
@@ -37,6 +39,7 @@ class wikiTools
     /**
      * @param bool $search
      * @param int  $limit
+     *
      * @return bool|mixed|null
      */
     public function getAllPagesFromCategory($search = false, $limit = 50)
@@ -59,6 +62,7 @@ class wikiTools
     /**
      * @param        $params
      * @param string $method
+     *
      * @return bool|mixed|null
      */
     public function fetch($params, $method = 'GET')
@@ -66,6 +70,7 @@ class wikiTools
         if (!$this->resetCurl()) {
             curl_close($this->ch);
             Yii::warning('Could not initialize CURL resource: ' . htmlspecialchars(curl_error($this->ch)));
+
             return false;
         }
 
@@ -94,6 +99,7 @@ class wikiTools
                     $response = Json::decode($data = curl_exec($this->ch), false);
                     if (!$data) {
                         Yii::warning('Curl error: ' . htmlspecialchars(curl_error($this->ch)));
+
                         return false;
                     }
 
@@ -120,13 +126,12 @@ class wikiTools
                     }
 
                     return ($this->returnedIsOkay($response)) ? $response : false;
-
-                    echo ' ! Unrecognized method.'; // @codecov ignore - will only be hit if error in our code
-                    return null;
             }
         } catch (\Exception $E) {
             echo " ! Exception caught!\n";
         }
+
+        return null;
     }
 
     /**
@@ -158,6 +163,7 @@ class wikiTools
 
     /**
      * @param $response
+     *
      * @return bool
      */
     private function returnedIsOkay($response)
@@ -171,8 +177,10 @@ class wikiTools
             } else {
                 Yii::warning('API call failed: ' . $response->error->info);
             }
+
             return false;
         }
+
         return true;
     }
 
@@ -182,11 +190,13 @@ class wikiTools
     private function username()
     {
         $userQuery = $this->fetch(['action' => 'query', 'meta' => 'userinfo']);
+
         return (isset($userQuery->query->userinfo->name)) ? $userQuery->query->userinfo->name : false;
     }
 
     /**
      * @param string|int $ids
+     *
      * @return bool|mixed|null
      */
     public function getPagesContentById($ids = '')
@@ -205,6 +215,7 @@ class wikiTools
      * @param string $newText
      * @param string $summary
      * @param bool   $isRewrite
+     *
      * @return bool
      */
     public function writePage($page = 'Участник:Citing Bot/Черновик', $newText = 'Тест №1', $summary = 'Тест', $isRewrite = true)
@@ -228,6 +239,7 @@ class wikiTools
         }
         if (!isset($response->batchcomplete)) {
             Yii::warning('Write request triggered no response from server', __METHOD__);
+
             return false;
         }
 
@@ -252,10 +264,12 @@ class wikiTools
         if (isset($result->error)) {
             Yii::warning('Write error: ' .
                 htmlspecialchars(strtoupper($result->error->code)) . ': ' . str_replace(['You ', ' have '], ['This bot ', ' has '], htmlspecialchars($result->error->info)), __METHOD__);
+
             return false;
         } elseif (isset($result->edit)) {
             if (isset($result->edit->captcha)) {
                 Yii::warning('Write error: We encountered a captcha, so can\'t be properly logged in.', __METHOD__);
+
                 return false;
             } elseif ($result->edit->result == 'Success') {
                 // Need to check for this string whereever our behaviour is dependant on the success or failure of the write operation
@@ -263,10 +277,12 @@ class wikiTools
                 return true;
             } elseif (isset($result->edit->result)) {
                 Yii::warning($result->edit->result, __METHOD__);
+
                 return false;
             }
         } else {
             Yii::warning('Unhandled write error.  Please copy this output and report a bug.');
+
             return false;
         }
 

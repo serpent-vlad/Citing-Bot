@@ -10,7 +10,7 @@ $config = [
     'id'         => 'citing-bot',
     'basePath'   => dirname(__DIR__),
     'bootstrap'  => ['log'],
-    'version'    => '1.4.3-beta',
+    'version'    => '1.4.4-beta',
     'name'       => 'Citing Bot',
     'aliases'    => [
         '@bower'  => '@vendor/bower-asset',
@@ -36,7 +36,7 @@ $config = [
             'class'         => 'yii\swiftmailer\Mailer',
             'messageConfig' => [
                 'charset' => 'UTF-8',
-                'from'    => 'tools.citing-bot@wmflabs.org',
+                'from'    => 'citing-bot@tools.wmflabs.org',
             ],
         ],
         'log'          => [
@@ -51,8 +51,8 @@ $config = [
                     'levels'  => ['error', 'warning'],
                     'logVars' => ['_GET'],
                     'message' => [
-                        'from'    => ['tools.citing-bot@wmflabs.org'],
-                        'to'      => ['kekaadrenalin@tools.wmflabs.org'],
+                        'from'    => ['citing-bot@tools.wmflabs.org'],
+                        'to'      => [$params['adminEmail']],
                         'subject' => 'Ошибка citing-bot',
                     ],
                     'except'  => [
