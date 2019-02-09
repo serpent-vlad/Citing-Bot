@@ -7,7 +7,7 @@ then
 	echo -e "\nUpdating the code..."
 	git reset --hard origin/release
     git pull origin release
-    composer update --lock
+    composer install
     php yii cache/flush-all
 	echo
 	read -r -p "OK to start the service? (Y/n)" response
