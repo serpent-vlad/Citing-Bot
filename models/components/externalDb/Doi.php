@@ -151,7 +151,9 @@ class Doi extends Cite
             return $response;
         }, 0, new TagDependency(['tags' => self::CACHE_TAG_ALL_DOI]));
 
-        if (!isset($response->status)) {}
+        if (!$response) {
+            return false;
+        }
 
         if ($response->status == 'ok') {
             $message = $response->message;
