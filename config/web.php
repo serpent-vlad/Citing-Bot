@@ -19,6 +19,7 @@ $config = [
     ],
     'components' => [
         'request'      => [
+            'baseUrl'             => '',
             'cookieValidationKey' => 'ugIMIWZ-4xkQMbxRlVNX68NjBjF_-sbe',
         ],
         'cache'        => [
