@@ -19,7 +19,6 @@ $config = [
     ],
     'components' => [
         'request'      => [
-            'baseUrl'             => 'https://tools.wmflabs.org/citing-bot',
             'cookieValidationKey' => 'ugIMIWZ-4xkQMbxRlVNX68NjBjF_-sbe',
         ],
         'cache'        => [
