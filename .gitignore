@@ -15,9 +15,6 @@ Thumbs.db
 # composer vendor dir
 /vendor
 
-# composer itself is not needed
-composer.phar
-
 # Mac DS_Store Files
 .DS_Store
 
@@ -32,3 +29,5 @@ tests/_support/_generated
 /config/params-local.php
 /replica.my.cnf
 cookiejar.txt
+
+.env

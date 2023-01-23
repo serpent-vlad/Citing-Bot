@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  toolforge:
+    image: 'docker-registry.tools.wmflabs.org/toolforge-php74-sssd-web'
+    container_name: '${COMPOSE_PROJECT_NAME}_toolforge'
+    tty: false
+    restart: unless-stopped
+    ports:
+      - '8888:80'
+    environment:
+      - 'TZ=${TZ}'
+    command: 'sh -c "lighty-enable-mod fastcgi-php && lighttpd -D -f /etc/lighttpd/lighttpd.conf"'
+    volumes:
+      - type: bind
+        source: ${PWD}
+        target: /var/www/html
+        consistency: cached
+        read_only: false
+    networks:
+      - network_citing_bot
+
+networks:
+  network_citing_bot:
+    driver: bridge

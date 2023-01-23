@@ -1,5 +1,5 @@
 {
-    "name": "serpent-vlad/Citing-Bot",
+    "name": "citing/bot",
     "description": "Tools for ru:Wikipedia",
     "type": "project",
     "version": "1.4.4-beta",
@@ -7,20 +7,24 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=7.2.0",
-        "ext-json": "*",
         "ext-curl": "*",
+        "ext-json": "*",
         "ext-simplexml": "*",
-        "yiisoft/yii2": "~2.0.5",
-        "yiisoft/yii2-bootstrap": "~2.0.0",
-        "yiisoft/yii2-swiftmailer": "~2.0.0",
-        "mediawiki/oauthclient": "^0.1.2"
+        "mediawiki/oauthclient": "^0.1.2",
+        "yiisoft/yii2": "^2.0",
+        "yiisoft/yii2-bootstrap": "^2.0",
+        "yiisoft/yii2-swiftmailer": "^2.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
         "yiisoft/yii2-gii": "~2.0.0"
     },
     "config": {
-        "process-timeout": 1800
+        "process-timeout": 1800,
+        "allow-plugins": true,
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
     },
     "scripts": {
         "post-install-cmd": [
