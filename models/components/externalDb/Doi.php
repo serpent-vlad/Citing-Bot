@@ -19,7 +19,7 @@ class Doi extends Cite
 
     /**
      * Doi constructor.
-     * @param bool  $id
+     * @param bool $id
      * @param array $config
      */
     public function __construct($id = false, array $config = [])
@@ -62,7 +62,9 @@ class Doi extends Cite
     protected function verifyDoi()
     {
         $doi = trim($this->doi);
-        if (!$doi) return false;
+        if (!$doi) {
+            return false;
+        }
 
         switch (substr($doi, -1)) {
             case '.':
@@ -73,7 +75,7 @@ class Doi extends Cite
                 break;
         }
 
-        if (substr($doi, 0, 3) != '10.') {
+        if (strpos($doi, '10.') !== 0) {
             $trial[] = $doi;
         }
         if (preg_match('~^(.+)(10\.\d{3|4}/.+)~', trim($doi), $match)) {
@@ -86,25 +88,27 @@ class Doi extends Cite
             $trial[] = str_replace(array_keys($replacements), $replacements, $doi);
         }
 
-        if (isset($trial)) foreach ($trial as $testDoi) {
-            if (preg_match('~[^/]*(\d{3|4}/.+)$~', $testDoi, $match))
-                $testDoi = '10.' . $match[1];
+        if (isset($trial)) {
+            foreach ($trial as $testDoi) {
+                if (preg_match('~[^/]*(\d{3|4}/.+)$~', $testDoi, $match)) {
+                    $testDoi = '10.' . $match[1];
+                }
 
-            $urlTest = 'https://doi.org/' . $testDoi;
-            $headersTest = @get_headers($urlTest, 1);
+                $urlTest = 'http://dx.doi.org/' . $testDoi;
+                $headersTest = @get_headers($urlTest, 1);
 
-            if ($headersTest) {
-                $this->doi = $testDoi;
+                if ($headersTest) {
+                    $this->doi = $testDoi;
+                }
             }
         }
 
         if ($this->getDoiFromCrossRef() === false) {
-            $urlTest = 'https://doi.org/' . $doi;
-            $headersTest = @get_headers($urlTest, 1);
+            $urlTest = 'http://dx.doi.org/' . $doi;
+            $headersTest = @get_headers($urlTest, true);
 
             if ($headersTest === false) {
                 Yii::warning('DOI status unkown.  dx.doi.org failed to respond at all to: ' . htmlspecialchars($doi));
-                return false;
             }
 
             return false;
@@ -123,28 +127,34 @@ class Doi extends Cite
         $response = Yii::$app->cache->getOrSet(self::CACHE_TAG_ONE_DOI . md5($this->doi), function () use ($url) {
             $curl = curl_init();
             curl_setopt_array($curl, [
-                CURLOPT_FAILONERROR    => true,
+                CURLOPT_FAILONERROR => true,
                 CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_MAXREDIRS      => 5,
-                CURLOPT_HEADER         => false,
-                CURLOPT_HTTPGET        => true,
+                CURLOPT_MAXREDIRS => 5,
+                CURLOPT_HEADER => false,
+                CURLOPT_HTTPGET => true,
                 CURLOPT_RETURNTRANSFER => true,
 
                 CURLOPT_CONNECTTIMEOUT_MS => 1200,
 
-                CURLOPT_URL       => $url,
+                CURLOPT_URL => $url,
                 CURLOPT_USERAGENT => self::USER_AGENT,
             ]);
 
             $response = @json_decode($data = curl_exec($curl), false);
 
             if (!isset($response->status) || !$data) {
-                Yii::warning('Curl error: ' . htmlspecialchars(curl_error($curl)));
+                Yii::warning([
+                    'doi' => $this->doi,
+                    'url' => $url,
+                    'error' => htmlspecialchars(curl_error($curl)),
+                ]);
+
                 return false;
             }
 
             if ($response->status === 'error') {
                 Yii::warning('Curl has errors');
+
                 return false;
             }
 
@@ -172,8 +182,12 @@ class Doi extends Cite
             $this->decodeUrl = $this->getDecodeUrl();
 
             $this->year = $message->issued->{'date-parts'}[0][0];
-            if (isset($message->issued->{'date-parts'}[0][1])) $this->month = $message->issued->{'date-parts'}[0][1];
-            if (isset($message->issued->{'date-parts'}[0][2])) $this->day = $message->issued->{'date-parts'}[0][2];
+            if (isset($message->issued->{'date-parts'}[0][1])) {
+                $this->month = $message->issued->{'date-parts'}[0][1];
+            }
+            if (isset($message->issued->{'date-parts'}[0][2])) {
+                $this->day = $message->issued->{'date-parts'}[0][2];
+            }
 
             if (isset($message->author)) {
                 foreach ($message->author as $author) {
@@ -211,11 +225,13 @@ class Doi extends Cite
                 $this->lang[0] = 'en';
             }
 
-            if (isset($message->issue))
+            if (isset($message->issue)) {
                 $this->issue = $message->issue;
+            }
 
-            if (isset($message->volume))
+            if (isset($message->volume)) {
                 $this->volume = $message->volume;
+            }
 
             if (isset($message->page)) {
                 $pages = $message->page;

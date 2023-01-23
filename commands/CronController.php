@@ -2,10 +2,13 @@
 
 namespace app\commands;
 
+use Throwable;
 use Yii;
 use yii\console\Controller;
 use models\components\Tools;
 use models\components\wiki\wikiTools;
+use yii\console\ExitCode;
+use yii\helpers\Console;
 
 /**
  * Class CronController
@@ -63,11 +66,14 @@ class CronController extends Controller
         $categoryJson = $wiki->getAllPagesFromCategory($this->pmidCategory, $this->limit);
         if (isset($categoryJson->error)) {
             Yii::warning($categoryJson->error, __METHOD__);
-            return 0;
+
+            return ExitCode::UNSPECIFIED_ERROR;
         }
 
         $pages = $categoryJson->query->categorymembers;
-        if (count($pages) === 0) return 0;
+        if (count($pages) === 0) {
+            return ExitCode::OK;
+        }
 
         $ids = array_map(function ($page) {
             return $page->pageid;
@@ -76,7 +82,8 @@ class CronController extends Controller
         $resultJson = $wiki->getPagesContentById(implode('|', $ids));
         if (isset($resultJson->error)) {
             Yii::warning($categoryJson->error, __METHOD__);
-            return 0;
+
+            return ExitCode::UNSPECIFIED_ERROR;
         }
 
         $editPageResult = [];
@@ -96,13 +103,14 @@ class CronController extends Controller
                 $tools->read();
                 $output = $tools->getOutputTemplate();
 
-                $editPageResult[$page->title] = $wiki->writePage('Шаблон:Cite pmid/' . $pmid, $output, $refSummary, false);
+                $editPageResult[$page->title] = $wiki->writePage('Шаблон:Cite pmid/' . $pmid, $output, $refSummary,
+                    false);
             }
         }
 
         print_r($editPageResult);
 
-        return 1;
+        return ExitCode::OK;
     }
 
     /**
@@ -110,27 +118,31 @@ class CronController extends Controller
      *
      * @return int
      */
-    public function actionDoi()
+    public function actionDoi(): int
     {
         $wiki = new wikiTools();
 
         $categoryJson = $wiki->getAllPagesFromCategory($this->doiCategory, $this->limit);
         if (isset($categoryJson->error)) {
             Yii::warning($categoryJson->error, __METHOD__);
-            return 0;
+
+            return ExitCode::UNSPECIFIED_ERROR;
         }
 
         $pages = $categoryJson->query->categorymembers;
-        if (count($pages) === 0) return 0;
+        if (count($pages) === 0) {
+            return ExitCode::OK;
+        }
 
-        $ids = array_map(function ($page) {
+        $ids = array_map(static function ($page) {
             return $page->pageid;
         }, $pages);
 
         $resultJson = $wiki->getPagesContentById(implode('|', $ids));
         if (isset($resultJson->error)) {
             Yii::warning($categoryJson->error, __METHOD__);
-            return 0;
+
+            return ExitCode::UNSPECIFIED_ERROR;
         }
 
         $editPageResult = [];
@@ -141,22 +153,34 @@ class CronController extends Controller
             preg_match_all($pattern, $contentPage, $matches);
 
             foreach ($matches[1] as $matchId => $doi) {
-                if (!preg_match('~^10.\d{4,9}/[-._;()/:A-Z0-9]+$~i', $doi)) break;
+                if (!preg_match('~^10.\d{4,9}/[-._;()/:A-Z0-9]+$~i', $doi)) {
+                    break;
+                }
                 $refSummary = 'Новая подстраница шаблона {{Cite doi}} для статьи [[' . $page->title . ']]';
 
                 $tools = new Tools('api');
                 $tools->scenario = Tools::SCENARIO_DOI;
                 $tools->input = $doi;
 
-                $tools->read();
-                $output = $tools->getOutputTemplate();
+                try {
+                    $tools->read();
+                    $output = $tools->getOutputTemplate();
 
-                $editPageResult[$page->title] = $wiki->writePage('Шаблон:Cite doi/' . $doi, $output, $refSummary, false);
+                    $editPageResult[$page->title] = $wiki->writePage(
+                        'Шаблон:Cite doi/' . $doi,
+                        $output,
+                        $refSummary,
+                        false
+                    );
+                } catch (Throwable $e) {
+                    Yii::error($e);
+                    Console::error("Unknown error: {$e->getMessage()}");
+                }
             }
         }
 
         print_r($editPageResult);
 
-        return 1;
+        return ExitCode::OK;
     }
 }
