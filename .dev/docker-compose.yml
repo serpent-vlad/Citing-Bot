@@ -17,6 +17,11 @@ services:
         target: /var/www/html
         consistency: cached
         read_only: false
+      - type: bind
+        source: ${PWD}/.dev/etc/lighttpd/lighttpd.conf
+        target: /etc/lighttpd/lighttpd.conf
+        consistency: cached
+        read_only: true
     networks:
       - network_citing_bot
 

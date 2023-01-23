@@ -22,7 +22,7 @@ class Doi extends Cite
      * @param bool  $id
      * @param array $config
      */
-    public function __construct($id = false, $config = [])
+    public function __construct($id = false, array $config = [])
     {
         $this->id = $id;
 
@@ -136,14 +136,14 @@ class Doi extends Cite
                 CURLOPT_USERAGENT => self::USER_AGENT,
             ]);
 
-            $response = @json_decode($data = curl_exec($curl));
+            $response = @json_decode($data = curl_exec($curl), false);
 
             if (!isset($response->status) || !$data) {
                 Yii::warning('Curl error: ' . htmlspecialchars(curl_error($curl)));
                 return false;
             }
 
-            if ($response->status == 'error') {
+            if ($response->status === 'error') {
                 Yii::warning('Curl has errors');
                 return false;
             }
@@ -155,7 +155,7 @@ class Doi extends Cite
             return false;
         }
 
-        if ($response->status == 'ok') {
+        if ($response->status === 'ok') {
             $message = $response->message;
 
             if (is_array($message->title) && isset($message->title[0])) {
@@ -169,6 +169,7 @@ class Doi extends Cite
 
             $this->publisher = strip_tags($message->publisher);
             $this->url = $message->URL;
+            $this->decodeUrl = $this->getDecodeUrl();
 
             $this->year = $message->issued->{'date-parts'}[0][0];
             if (isset($message->issued->{'date-parts'}[0][1])) $this->month = $message->issued->{'date-parts'}[0][1];
@@ -241,5 +242,10 @@ class Doi extends Cite
         }
 
         return false;
+    }
+
+    private function getDecodeUrl(): string
+    {
+        return "http://dx.doi.org/{{urlencode:{$this->doi}}}";
     }
 }

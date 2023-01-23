@@ -39,6 +39,7 @@ class Template extends BaseModel
     public $title;
     public $titleOriginal;
     public $url;
+    public $decodeUrl;
     public $lang;
     public $responsible;
     public $authorEdition;
@@ -99,7 +100,7 @@ class Template extends BaseModel
             . '|автор=' . $this->authorsFormat() . PHP_EOL
             . '|заглавие=' . $this->title . PHP_EOL;
 
-        if ($this->url) $output .= '|ссылка=' . $this->url . PHP_EOL;
+        if ($this->decodeUrl) $output .= '|ссылка=' . $this->decodeUrl . PHP_EOL;
         if ($this->lang) $output .= '|язык=' . $this->lang[0] . PHP_EOL;
         if ($this->edition) $output .= '|издание=' . $this->edition . PHP_EOL;
         if ($this->year) $output .= '|год=' . $this->year . PHP_EOL;

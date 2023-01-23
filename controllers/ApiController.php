@@ -11,8 +11,8 @@ use models\components\wiki\wikiTools;
 class ApiController extends Controller
 {
     /**
-     * @param bool        $pmid
-     * @param bool        $doi
+     * @param bool $pmid
+     * @param bool $doi
      * @param bool|string $pageOut
      * @return \yii\web\Response
      */
@@ -33,7 +33,7 @@ class ApiController extends Controller
      * Displays Bot page for PMID.
      *
      * @param null|string|int $pmid
-     * @param bool|string     $pageOut
+     * @param bool|string $pageOut
      * @return string
      * @throws \yii\base\Exception
      */
@@ -41,6 +41,7 @@ class ApiController extends Controller
     {
         if ((int)$pmid < 1) {
             Yii::$app->response->statusCode = 404;
+
             return $this->render('empty', [
                 'params' => [
                     'PMID',
@@ -66,16 +67,15 @@ class ApiController extends Controller
 
         return $this->render('pmid', [
             'isEditSuccess' => $editPageResult,
-            'output'        => $output,
-            'pmid'          => $pmid,
+            'output' => $output,
+            'pmid' => $pmid,
         ]);
     }
 
     /**
      * @param string $doi
-     * @param bool   $pageOut
+     * @param bool $pageOut
      * @return string
-     * @throws \yii\base\Exception
      */
     public function actionDoi($doi = '', $pageOut = false)
     {
@@ -83,6 +83,7 @@ class ApiController extends Controller
 
         if (!preg_match('~^10\.\d{4,9}/.+$~i', $doi)) {
             Yii::$app->response->statusCode = 404;
+
             return $this->render('empty', [
                 'params' => [
                     'DOI',
@@ -108,8 +109,8 @@ class ApiController extends Controller
 
         return $this->render('doi', [
             'isEditSuccess' => $editPageResult,
-            'output'        => $output,
-            'doi'           => $doi,
+            'output' => $output,
+            'doi' => $doi,
         ]);
     }
 }

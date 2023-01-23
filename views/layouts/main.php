@@ -72,7 +72,7 @@ AppAsset::register($this);
     <div class="container">
         <div class="row">
             <div class="col-xs-7 col-md-9">
-                <p>&copy; 2014 – 2018 &middot; <a href="//ru.wikipedia.org/wiki/U:Citing_Bot"
+                <p>&copy; 2014 – <?php echo date('Y') ?> &middot; <a href="//ru.wikipedia.org/wiki/U:Citing_Bot"
                                                   title="Страница бота" target="_blank">Citing Bot</a> &middot; <a
                             href="//github.com/serpent-vlad/Citing-Bot/releases/tag/<?= Yii::$app->version ?>"
                             target="_blank" title="Текущий релиз Citing-Bot">v.<?= Yii::$app->version ?></a> (<a
@@ -89,7 +89,7 @@ AppAsset::register($this);
             <div class="col-xs-5 col-md-3">
                 <div class="text-right">
                     <a href="//wikitech.wikimedia.org/wiki/Portal:Cloud_VPS" target="_blank">
-                        <img height="40px" src="/citing-bot/img/VPS-badge.svg" alt="Powered by Wikimedia Cloud Services">
+                        <img height="40px" src="/img/VPS-badge.svg" alt="Powered by Wikimedia Cloud Services">
                     </a>
                 </div>
             </div>

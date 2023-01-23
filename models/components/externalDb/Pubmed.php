@@ -52,6 +52,7 @@ class Pubmed extends Cite
         }
 
         $this->url = "https://www.ncbi.nlm.nih.gov/pubmed/{$this->id}";
+        $this->decodeUrl = $this->url;
 
         /** @var \SimpleXMLElement $item */
         if (count($xml->DocSum->Item) > 0) foreach ($xml->DocSum->Item as $item) {

@@ -38,6 +38,7 @@ class Cite extends BaseModel
     public $title;
     public $titleOriginal;
     public $url;
+    public $decodeUrl;
     public $lang;
     public $responsible;
     public $authorEdition;
