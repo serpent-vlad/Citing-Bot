@@ -2,7 +2,7 @@
     "name": "citing/bot",
     "description": "Tools for ru:Wikipedia",
     "type": "project",
-    "version": "1.4.4-beta",
+    "version": "1.4.5",
     "license": "GPL-3.0+",
     "minimum-stability": "stable",
     "require": {
