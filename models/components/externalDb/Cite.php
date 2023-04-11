@@ -56,6 +56,7 @@ class Cite extends BaseModel
     public $issn;
     public $doi;
     public $pmid;
+    public $pmc;
     public $bibcode;
 
     protected $id;

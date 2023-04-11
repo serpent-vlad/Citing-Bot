@@ -28,6 +28,7 @@ namespace models\components;
  * @property string     $issn                  ISSN
  * @property string     $doi                   DOI
  * @property int        $pmid                  PMID
+ * @property int        $pmc                   PMC
  * @property string     $bibcode               Bibcode
  * @property string     $arxiv                 arXiv
  * @property string     $archiveurl            arXiv url
@@ -59,6 +60,7 @@ class Template extends BaseModel
     public $bibcode;
     public $arxiv;
     public $pmid;
+    public $pmc;
     public $ref;
     public $archiveurl;
     public $archivedate;
@@ -113,6 +115,7 @@ class Template extends BaseModel
         if ($this->doi) $output .= '|doi=' . $this->doi . PHP_EOL;
         if ($this->issn) $output .= '|issn=' . $this->issn . PHP_EOL;
         if ($this->isbn) $output .= '|isbn=' . $this->isbn . PHP_EOL;
+        if ($this->pmc) $output .= '|pmc=' . $this->pmc . PHP_EOL;
 
         $output .= '}}';
         $output .= $categoryTemplate;

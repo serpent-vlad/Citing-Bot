@@ -118,6 +118,10 @@ class Pubmed extends Cite
                                 preg_match("~\d+~", (string)$subItem, $match);
                                 $this->pmid = (int)$match[0];
                                 break;
+                            case "pmc":
+                                preg_match("~\d+~", (string)$subItem, $match);
+                                $this->pmc = (int)$match[0];
+                                break;
                             case "doi":
                             case "pii":
                             default:
